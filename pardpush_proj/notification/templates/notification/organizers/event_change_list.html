@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">My Events</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">My Events</h2>
+  <a href="{% url 'organizers:event_add' %}" class="btn btn-primary mb-3" role="button">Add event</a>
+  <div class="card">
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+          <tr>
+            <td class="align-middle"><a href="{% url 'organizers:event_change' event.pk %}">{{ event.name }}</a></td>
+            <td class="align-middle">{{ event.date }}</td>
+            <td class="align-middle">{{ event.location }}</td>
+            <td class="align-middle">{{ event.tag.get_html_badge }}</td>
+            <td class="text-right">
+              <a href="{% url 'organizers:event_change' event.pk %}" class="btn btn-primary">Edit</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="bg-light text-center font-italic" colspan="5">You haven't created any event yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
