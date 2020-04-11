@@ -1,9 +1,10 @@
 from django.urls import include, path
-
+from django.contrib import admin
 from notification.views import notification, students, organizers
 
 urlpatterns = [
     path('', include('notification.urls')),
+    path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/signup/', notification.SignUpView.as_view(), name='signup'),
     path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),

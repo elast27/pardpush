@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'notification',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
