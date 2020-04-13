@@ -55,6 +55,7 @@ class EventCreateView(CreateView):
         event.owner = self.request.user
         event.save()
         messages.success(self.request, 'The event was created with success!')
+        form.send_notification(self.request, form) # Send email notification
         return redirect('organizers:event_change', event.pk)
 
 
