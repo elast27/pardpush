@@ -144,3 +144,10 @@ MESSAGE_TAGS = {
 # Third party apps configuration
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Email variables
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'pardpushhost@gmail.com'
+EMAIL_HOST_PASSWORD = 'holozuxbsprorhvy'
+EMAIL_USE_TLS = True
