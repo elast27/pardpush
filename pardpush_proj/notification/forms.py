@@ -23,6 +23,7 @@ class OrganizerSignUpForm(UserCreationForm):
 class StudentSignUpForm(UserCreationForm):
     # Email field
     email = forms.EmailField(required=True, help_text='Must be a valid lafayette.edu or gmail account.')
+    phone = forms.CharField(required=True)
     
     interests = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
@@ -37,6 +38,7 @@ class StudentSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_student = True
+        user.email = self.cleaned_data["email"]
         user.save()
         student = Student.objects.create(user=user)
         student.interests.add(*self.cleaned_data.get('interests'))
