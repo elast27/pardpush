@@ -36,6 +36,7 @@ class Event(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     interests = models.ManyToManyField(Tag, related_name='interested_students')
+    phone = models.CharField(blank=True, max_length = 254, verbose_name='phone')
 
     def __str__(self):
         return self.user.username
