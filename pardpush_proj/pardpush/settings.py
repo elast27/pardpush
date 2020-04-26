@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'pardpush.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pardpushdb',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'abcd1234',
         'HOST': 'localhost',
