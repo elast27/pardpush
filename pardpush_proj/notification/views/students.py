@@ -12,6 +12,7 @@ from ..decorators import student_required
 from ..forms import StudentInterestsForm, StudentSignUpForm
 from ..models import Event, Student, User
 
+from django.http import HttpResponse
 
 class StudentSignUpView(CreateView):
     model = User

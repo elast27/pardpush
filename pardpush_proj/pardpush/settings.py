@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django_cas_ng',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_cas_ng.middleware.CASMiddleware'
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',  # Add this line
+]
+
+CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login?service=https://pardpush.cs.lafayette.edu/'
+CAS_VERSION = '3'
 
 ROOT_URLCONF = 'pardpush.urls'
 
