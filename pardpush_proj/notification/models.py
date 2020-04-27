@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.html import escape, mark_safe
 from datetime import datetime
+from phone_field import PhoneField
 
 
 class User(AbstractUser):
@@ -38,7 +39,7 @@ class Event(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     interests = models.ManyToManyField(Tag, related_name='interested_students')
-    phone = models.CharField(blank=True, max_length = 254, verbose_name='phone')
+    phone = PhoneField(blank=True, verbose_name='phone')
 
     def __str__(self):
         return self.user.username

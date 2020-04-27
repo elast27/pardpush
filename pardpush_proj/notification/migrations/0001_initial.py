@@ -7,6 +7,7 @@ import django.utils.timezone
 from django.conf import settings
 from django.db import migrations, models
 import datetime
+from phone_field import PhoneField
 
 class Migration(migrations.Migration):
 
@@ -28,7 +29,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(blank=True, max_length=30, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
                 ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('phone', models.CharField(blank=True, max_length=254, verbose_name='phone')),
+                ('phone', PhoneField(blank=True, verbose_name='phone')),
                 ('budget', models.FloatField(default=0, verbose_name='budget')),
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
