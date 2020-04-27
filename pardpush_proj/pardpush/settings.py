@@ -61,7 +61,7 @@ AUTHENTICATION_BACKENDS = [
     'django_cas_ng.backends.CASBackend',  # Add this line
 ]
 
-CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login?service=https://pardpush.cs.lafayette.edu/'
+CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
 CAS_VERSION = '3'
 
 ROOT_URLCONF = 'pardpush.urls'
@@ -92,12 +92,12 @@ WSGI_APPLICATION = 'pardpush.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pardpush',
+        'USER': 'matthewstern',
         'PASSWORD': 'abcd1234',
         'HOST': 'localhost',
-        'PORT': '5433'
+        'PORT': ''
     }
 }
 
