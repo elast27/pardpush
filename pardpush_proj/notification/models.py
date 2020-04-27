@@ -5,8 +5,10 @@ from datetime import datetime
 
 
 class User(AbstractUser):
+    budget = models.FloatField(default=0, verbose_name='budget')
     is_student = models.BooleanField(default=False)
     is_organizer = models.BooleanField(default=False)
+    
 
 
 class Tag(models.Model):

@@ -42,6 +42,8 @@ class StudentSignUpForm(UserCreationForm):
         user.save()
         student = Student.objects.create(user=user)
         student.interests.add(*self.cleaned_data.get('interests'))
+        student.phone = self.cleaned_data["phone"]
+        student.save()
         return user
 
 

@@ -54,6 +54,9 @@ class EventCreateView(CreateView):
         event = form.save(commit=False)
         event.owner = self.request.user
         event.save()
+        some_var = self.request.POST.getlist('tag') # Gives a list of tags chosen by the user
+        for obj in some_var:
+            event.tag.add(obj)
         messages.success(self.request, 'The event was created with success!')
         form.send_notification(self.request, form) # Send email notification
         return redirect('organizers:event_change', event.pk)
