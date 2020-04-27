@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
             name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30)),
+                ('tagname', models.CharField(max_length=30)),
                 ('color', models.CharField(default='#007bff', max_length=7)),
             ],
         ),

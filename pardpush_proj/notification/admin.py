@@ -15,9 +15,9 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('id','name')
-    list_display_links = ('id','name')
-    search_fields = ('name',)
+    list_display = ('id','tagname')
+    list_display_links = ('id','tagname')
+    search_fields = ('tagname',)
     list_per_page = 25
 
 admin.site.register(Tag, TagAdmin)

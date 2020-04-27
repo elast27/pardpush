@@ -5,11 +5,11 @@ from django.db import migrations
 
 def create_tags(apps, schema_editor):
     Tag = apps.get_model('notification', 'Tag')
-    Tag.objects.create(name='Free Food', color='#343a40')
-    Tag.objects.create(name='Give away', color='#007bff')
-    Tag.objects.create(name='Math', color='#28a745')
-    Tag.objects.create(name='Biology', color='#17a2b8')
-    Tag.objects.create(name='Sports', color='#ffc107')
+    Tag.objects.create(tagname='Free Food', color='#343a40')
+    Tag.objects.create(tagname='Give away', color='#007bff')
+    Tag.objects.create(tagname='Math', color='#28a745')
+    Tag.objects.create(tagname='Biology', color='#17a2b8')
+    Tag.objects.create(tagname='Sports', color='#ffc107')
 
 class Migration(migrations.Migration):
 

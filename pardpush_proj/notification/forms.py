@@ -1,3 +1,6 @@
+import psycopg2
+import os
+from twilio.rest import Client
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -42,7 +45,7 @@ class StudentSignUpForm(UserCreationForm):
         user.save()
         student = Student.objects.create(user=user)
         student.interests.add(*self.cleaned_data.get('interests'))
-        student.phone = self.cleaned_data["phone"]
+        student.phone=self.cleaned_data["phone"]
         student.save()
         return user
 
@@ -99,3 +102,44 @@ class TagSelectForm(forms.ModelForm):
                 email.send()
                 
         connection.close()
+
+    def send_SMS(self, request, queryset):
+        def createQuery(lst):
+            query = 'SELECT phone FROM usable_table WHERE tagname='
+            if len(lst)==1:
+                query += '\'' + lst[0].__str__() + '\''
+            else:
+                for i in range(0, len(lst)-1):
+                    query += '\'' + lst[i].__str__()+'\' OR WHERE tagname='
+                query += '\'' + lst[-1].__str__() + '\''
+            return query
+        def sendQuery(query):
+            conn = psycopg2.connect("dbname=pardpush user=matthewstern")
+            cur = conn.cursor()
+            cur.execute(query)
+            lst = cur.fetchall()
+            cur.close()
+            conn.close()
+            return lst
+        def sendLoop(lst, msg):
+            #SECURE
+            #account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            #auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            #TEST
+            account_sid = 'AC65adbf73953668e75fc8dea6e776a18a'
+            auth_token = '3890a907679e2a2402c5595bfa576f14'
+            #REAL BELOW
+            #account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
+            #auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+            client = Client(account_sid, auth_token)
+            for i in lst:
+                message = client.messages.create(
+                    from_='+16108105091',
+                    body=msg,
+                    to=i
+                )
+        tags = list(queryset.cleaned_data['tag'])
+        msg = queryset.cleaned_data['message']
+        query = createQuery(tags)
+        lst = sendQuery(query)
+        sendLoop(lst,msg)
