@@ -1,4 +1,6 @@
 import psycopg2
+import os
+from twilio.rest import Client
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -101,14 +103,13 @@ class TagSelectForm(forms.ModelForm):
 
     def send_SMS(self, request, queryset):
         def createQuery(lst):
-            query = 'SELECT phone,email FROM usable_table WHERE tagname LIKE \"%'
+            query = 'SELECT phone,email FROM usable_table WHERE tagname='
             if len(lst)==1:
-                query += lst[0].__str__()+'%\"'
+                query += '\'' + lst[0].__str__() + '\''
             else:
                 for i in range(0, len(lst)-1):
-                    query += lst[i].__str__()+'%\" OR \"%'
-                query += lst[-1].__str__()+'%\"'
-                query += 'GROUP BY phone;'
+                    query += '\'' + lst[i].__str__()+'\' OR WHERE tagname='
+                query += '\'' + lst[-1].__str__() + '\''
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=matthewstern")
@@ -119,8 +120,10 @@ class TagSelectForm(forms.ModelForm):
             conn.close()
             return lst
         def sendLoop(lst, msg):
-            account_sid = os.environ['TWILIO_ACCOUNT_SID']
-            auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            #account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            #auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            account_sid = 'AC65adbf73953668e75fc8dea6e776a18a'
+            auth_token = '3890a907679e2a2402c5595bfa576f14'
             client = Client(account_sid, auth_token)
             for i in lst:
                 message = client.messages.create(
