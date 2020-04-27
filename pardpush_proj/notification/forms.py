@@ -148,6 +148,14 @@ class TagSelectForm(forms.ModelForm):
             cur.close()
             conn.close()
             return tmp
+        def setBudget(request,val):
+            conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+            cur = conn.cursor()
+            id = request.user.id
+            cur.execute('UPDATE notification_user SET budget=' + val.__str__() + ' where id=' + id.__str__() + ';')
+            conn.commit()
+            cur.close()
+            conn.close()
         tags = list(queryset.cleaned_data['tag'])
         msg = queryset.cleaned_data['name'] + ": " + queryset.cleaned_data['date'].strftime('%a, %b %d, %-I:%M %p') + " @ " + queryset.cleaned_data['location'] + "\n" + queryset.cleaned_data['message']
         query = createQuery(tags)
@@ -156,6 +164,7 @@ class TagSelectForm(forms.ModelForm):
         budget = getBudget(request)
         if cost <= budget[0]:
             sendLoop(lst,msg)
+            setBudget(request,budget[0]-cost)
             return (True,cost)
         else:
             return (False,cost)
