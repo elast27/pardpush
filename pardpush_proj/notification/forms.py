@@ -1,3 +1,4 @@
+import psycopg2
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -98,42 +99,41 @@ class TagSelectForm(forms.ModelForm):
                 
         connection.close()
 
-def send_SMS(self, request, queryset):
-        tags = queryset.cleaned_data['tag']
+    def send_SMS(self, request, queryset):
+        def createQuery(lst):
+            query = 'SELECT phone,email FROM usable_table WHERE tagname LIKE \"%'
+            if len(lst)==1:
+                query += lst[0].__str__()+'%\"'
+            else:
+                for i in range(0, len(lst)-1):
+                    query += lst[i].__str__()+'%\" OR \"%'
+                query += lst[-1].__str__()+'%\"'
+                query += 'GROUP BY phone;'
+            return query
+        def sendQuery(query):
+            conn = psycopg2.connect("dbname=pardpush user=matthewstern")
+            cur = conn.cursor()
+            cur.execute(query)
+            lst = cur.fetchall()
+            cur.close()
+            conn.close()
+            return lst
+        def sendLoop(lst, msg):
+            account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            client = Client(account_sid, auth_token)
+            for i in lst:
+                message = client.messages.create(
+                    from_='+16108105091',
+                    body=msg,
+                    to=i
+                )
+        tags = list(queryset.cleaned_data['tag'])
+        print(tags)
         msg = queryset.cleaned_data['message']
         query = createQuery(tags)
         lst = sendQuery(query)
         sendLoop(lst,msg)
-    
-def createQuery(self,lst):
-    query = 'SELECT phone,email FROM usable_table WHERE interests LIKE \"%'
-    if len(lst)==1:
-       query += lst[0]+'%\"'
-    else:
-        for i in range(0, len(lst)-1):
-            query += lst[i]+'%\" OR \"%'
-        query += lst[-1]+'%\"'
-    return query
-
-def sendQuery(self,query):
-    conn = psycopg2.connect("dbname=pardpushdb user=postgres")
-    cur = conn.cursor()
-    cur.execute(query)
-    lst = cur.fetchall()
-    cur.close()
-    conn.close()
-    return lst
-
-def sendLoop(self,lst,msg):
-    account_sid = os.environ['TWILIO_ACCOUNT_SID']
-    auth_token = os.environ['TWILIO_AUTH_TOKEN']
-    client = Client(account_sid, auth_token)
-    for i in lst:
-        message = client.messages.create(
-            from_='+16108105091',
-            body=msg,
-            to=i
-        )
 
         #for i in lst:
         #    curl 'https://api.twilio.com/2010-04-01/Accounts/AC2deef53dadb3d1035219e6f346544e98/Messages.json' -X POST --data-urlencode 'To=+1'+i --data-urlencode 'From=+16108105091'  -u AC2deef53dadb3d1035219e6f346544e98:d437bf9f8e7dc2602dd5632d62062810
