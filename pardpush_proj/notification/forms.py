@@ -36,7 +36,7 @@ class StudentSignUpForm(UserCreationForm):
     )
 
     def send_initSMS(self, request, queryset):
-         #SECURE
+        #SECURE
         #account_sid = os.environ['TWILIO_ACCOUNT_SID']
         #auth_token = os.environ['TWILIO_AUTH_TOKEN']
         #TEST
@@ -57,7 +57,7 @@ class StudentSignUpForm(UserCreationForm):
             cur.close()
             conn.close()
             return tmp
-        msg = 'Welcome to PardPush, ' + request.user.first_name + '! Visit the user dashboard at pardpush.cs.lafayette.edu to change you preferences, or reply STOP to unsubscribe at any time. Msg&Data Rates May Apply.'
+        msg = 'Welcome to PardPush, ' + request.user.first_name + '! Visit the user dashboard at pardpush.cs.lafayette.edu to change your preferences, or reply STOP to unsubscribe at any time. Msg&Data Rates May Apply.'
         num = getStudentNumber(request.user.id)
         try:
             message = client.messages.create(
@@ -152,6 +152,8 @@ class TagSelectForm(forms.ModelForm):
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=matthewstern")
             cur = conn.cursor()
+            cur.execute("REFRESH MATERIALIZED VIEW usable_table;")
+            conn.commit()
             cur.execute(query)
             lst = cur.fetchall()
             cur.close()
