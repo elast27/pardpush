@@ -35,6 +35,40 @@ class StudentSignUpForm(UserCreationForm):
         required=True
     )
 
+    def send_initSMS(self, request, queryset):
+         #SECURE
+        #account_sid = os.environ['TWILIO_ACCOUNT_SID']
+        #auth_token = os.environ['TWILIO_AUTH_TOKEN']
+        #TEST
+        #account_sid = 'AC65adbf73953668e75fc8dea6e776a18a'
+        #auth_token = '3890a907679e2a2402c5595bfa576f14'
+        #REAL BELOW
+        account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
+        auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+        client = Client(account_sid, auth_token)
+        def getStudentNumber(id):
+            conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+            cur = conn.cursor()
+            id = request.user.id
+            cur.execute('REFRESH MATERIALIZED VIEW student_phones;')
+            conn.commit()
+            cur.execute('SELECT phone FROM student_phones WHERE user_id='+id.__str__()+';')
+            tmp = cur.fetchone()
+            cur.close()
+            conn.close()
+            return tmp
+        msg = 'Welcome to PardPush, ' + request.user.first_name + '! Visit the user dashboard at pardpush.cs.lafayette.edu to change you preferences, or reply STOP to unsubscribe at any time. Msg&Data Rates May Apply.'
+        num = getStudentNumber(request.user.id)
+        try:
+            message = client.messages.create(
+                from_='+16108105091',
+                body=msg,
+                to=num[0]
+            )
+        except TwilioRestException:
+            #maybe do something about the person that unsubscribed here
+            print(i.__str__() + " unsubscribed; no message sent")
+
     class Meta(UserCreationForm.Meta):
         model = User
 

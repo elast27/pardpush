@@ -26,6 +26,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
+        form.send_initSMS(self.request, form) #sends welcome sms to the user
         return redirect('students:event_list')
 
 
