@@ -1,6 +1,7 @@
 import psycopg2
 import os
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -134,11 +135,15 @@ class TagSelectForm(forms.ModelForm):
             auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
             client = Client(account_sid, auth_token)
             for i in lst:
-                message = client.messages.create(
-                    from_='+16108105091',
-                    body=msg,
-                    to=i
-                )
+                try:
+                    message = client.messages.create(
+                        from_='+16108105091',
+                        body=msg,
+                        to=i
+                    )
+                except TwilioRestException:
+                    #maybe do something about the person that unsubscribed here
+                    print(i.__str__() + " unsubscribed; no message sent")
         def getBudget(request):
             conn = psycopg2.connect('dbname=pardpush user=matthewstern')
             cur = conn.cursor()
