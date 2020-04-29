@@ -1,6 +1,5 @@
 Django==2.0.1
 django-crispy-forms==1.7.0
-pytz==2017.3
 psycopg2==2.8.5
 psycopg2-binary==2.8.5
 django-modeladmin-reorder==0.2
