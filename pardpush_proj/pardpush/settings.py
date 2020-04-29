@@ -155,6 +155,7 @@ MESSAGE_TAGS = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+#needed to be remove after development
 # Email variables
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
