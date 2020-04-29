@@ -90,16 +90,16 @@ WSGI_APPLICATION = 'pardpush.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pardpush',
-        'USER': 'matthewstern',
-        'PASSWORD': 'abcd1234',
-        'HOST': 'localhost',
-        'PORT': ''
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'pardpush',
+#         'USER': 'matthewstern',
+#         'PASSWORD': 'abcd1234',
+#         'HOST': 'localhost',
+#         'PORT': ''
+#     }
+# }
 
 
 # Internationalization
@@ -157,11 +157,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #needed to be remove after development
 # Email variables
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'pardpushhost@gmail.com'
-EMAIL_HOST_PASSWORD = 'holozuxbsprorhvy'
-EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'pardpushhost@gmail.com'
+# EMAIL_HOST_PASSWORD = 'holozuxbsprorhvy'
+# EMAIL_USE_TLS = True
 
 try:
     from .local_settings import *

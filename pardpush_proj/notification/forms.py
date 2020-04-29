@@ -47,7 +47,7 @@ class StudentSignUpForm(UserCreationForm):
         auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
         client = Client(account_sid, auth_token)
         def getStudentNumber(id):
-            conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
             cur = conn.cursor()
             id = request.user.id
             cur.execute('REFRESH MATERIALIZED VIEW student_phones;')
@@ -150,7 +150,7 @@ class TagSelectForm(forms.ModelForm):
                 query += " GROUP BY phone"
             return query
         def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=matthewstern")
+            conn = psycopg2.connect("dbname=pardpush user=dbadmin")
             cur = conn.cursor()
             cur.execute("REFRESH MATERIALIZED VIEW usable_table;")
             conn.commit()
@@ -181,7 +181,7 @@ class TagSelectForm(forms.ModelForm):
                     #maybe do something about the person that unsubscribed here
                     print(i.__str__() + " unsubscribed; no message sent")
         def getBudget(request):
-            conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
             cur = conn.cursor()
             id = request.user.id
             cur.execute('SELECT budget FROM notification_user WHERE id='+id.__str__()+';')
@@ -190,7 +190,7 @@ class TagSelectForm(forms.ModelForm):
             conn.close()
             return tmp
         def setBudget(request,val):
-            conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
             cur = conn.cursor()
             id = request.user.id
             cur.execute('UPDATE notification_user SET budget=' + val.__str__() + ' where id=' + id.__str__() + ';')
