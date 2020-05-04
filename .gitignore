@@ -12,3 +12,4 @@ db.sqlite3
 venv
 /static
 pardpush_proj/pardpush/settings.py
+pardpush_proj/pardpush/settings.py

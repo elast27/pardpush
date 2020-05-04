@@ -25,7 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd$pxg6fisc4iwzk&vz^s_d0lkf&k63l5a8f!obktw!jg#4zvp3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -58,7 +59,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'django_cas_ng.backends.CASBackend',  # Add this line
+    #'django_cas_ng.backends.CASBackend',  # Add this line
 ]
 
 CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
@@ -97,16 +98,16 @@ WSGI_APPLICATION = 'pardpush.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'pardpush',
-#         'USER': 'matthewstern',
-#         'PASSWORD': 'abcd1234',
-#         'HOST': 'localhost',
-#         'PORT': ''
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pardpush',
+        'USER': 'matthewstern',
+        'PASSWORD': 'abcd1234',
+        'HOST': 'localhost',
+        'PORT': ''
+    }
+}
 
 
 # Internationalization

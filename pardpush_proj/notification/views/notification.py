@@ -8,7 +8,7 @@ class SignUpView(TemplateView):
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            return render(request, 'admin/base_site.html')
+            return redirect('admin/')
         elif request.user.is_organizer:
             return redirect('organizers:event_change_list')
         else:
