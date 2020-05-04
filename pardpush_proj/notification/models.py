@@ -43,3 +43,22 @@ class Student(models.Model):
 
     def __str__(self):
         return self.user.username
+
+###Materialized Views###
+
+class UsableTable(models.Model):
+    phone = models.CharField(max_length=31)
+    email = models.CharField(max_length=254)
+    tagname = models.CharField(max_length=30)
+    
+    class Meta:
+        managed = False
+        db_table = 'usable_table'
+
+class StudentPhones(models.Model):
+    user_id = models.IntegerField()
+    phone = models.CharField(max_length=31)
+    
+    class Meta:
+        managed = False
+        db_table = 'studentphones'
