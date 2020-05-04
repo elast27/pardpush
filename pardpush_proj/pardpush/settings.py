@@ -63,6 +63,8 @@ AUTHENTICATION_BACKENDS = [
 
 CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
 CAS_VERSION = '3'
+CAS_RENAME_ATTRIBUTES = {"surname": "last_name", "givenName":
+"first_name"}
 
 ROOT_URLCONF = 'pardpush.urls'
 
