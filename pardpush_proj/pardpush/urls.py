@@ -10,6 +10,6 @@ urlpatterns = [
     path('accounts/signup/', notification.SignUpView.as_view(), name='signup'),
     path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),
     path('accounts/signup/organizer/', organizers.OrganizerSignUpView.as_view(), name='organizer_signup'),
-    path('accounts/login', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
-    path('accounts/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
+    path('accounts/caslogin', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
+    path('accounts/caslogout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
 ]
