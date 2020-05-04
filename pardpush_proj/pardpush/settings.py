@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    #'django_cas_ng.backends.CASBackend',  # Add this line
+    'django_cas_ng.backends.CASBackend',  # Add this line
 ]
 
 CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
