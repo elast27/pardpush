@@ -53,14 +53,15 @@ class EventCreateView(CreateView):
     def form_valid(self, form):
         event = form.save(commit=False)
         event.owner = self.request.user
-        event.save()
-        some_var = self.request.POST.getlist('tag') # Gives a list of tags chosen by the user
-        for obj in some_var:
-            event.tag.add(obj)
+        some_var = self.request.POST.getlist('tag') # Gives a list of tags chosen by the user 
         succ = form.send_SMS(self.request, form) #Send SMS notification
         if succ[0]:
-            form.send_notification(self.request, form) # Send email notification
+            #   form.send_notification(self.request, form) # Send email notification
+            event.save()
+            for obj in some_var:
+                event.tag.add(obj)
             messages.success(self.request, 'The event was created with success!')
+            return redirect('home')
         else:
             messages.error(self.request, 'You do not have enough funds to complete this request. Cost: $' + succ[1].__str__() + '.  Please contact PardPush admin to add more funds.')
         return redirect('organizers:event_change', event.pk)
