@@ -63,6 +63,11 @@ AUTHENTICATION_BACKENDS = [
 
 CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
 CAS_VERSION = '3'
+CAS_LOGOUT_COMPLETELY = True
+CAS_IGNORE_REFERER = True
+CAS_RETRY_LOGIN = True
+CAS_FORCE_CHANGE_USERNAME_CASE = "lower"
+CAS_APPLY_ATTRIBUTES_TO_USER = True
 CAS_RENAME_ATTRIBUTES = {"surname": "last_name", "givenName":
 "first_name"}
 
