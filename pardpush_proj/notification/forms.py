@@ -50,9 +50,9 @@ class StudentSignUpForm(UserCreationForm):
             conn = psycopg2.connect('dbname=pardpush user=dbadmin')
             cur = conn.cursor()
             id = request.user.id
-            cur.execute('REFRESH MATERIALIZED VIEW student_phones;')
+            cur.execute('REFRESH MATERIALIZED VIEW CONCURRENTLY studentphones;')
             conn.commit()
-            cur.execute('SELECT phone FROM student_phones WHERE user_id='+id.__str__()+';')
+            cur.execute('SELECT phone FROM studentphones WHERE user_id='+id.__str__()+';')
             tmp = cur.fetchone()
             cur.close()
             conn.close()
@@ -140,7 +140,7 @@ class TagSelectForm(forms.ModelForm):
 
     def send_SMS(self, request, queryset):
         def createQuery(lst):
-            query = 'SELECT phone FROM usable_table WHERE tagname='
+            query = 'SELECT phone FROM usabletable WHERE tagname='
             if len(lst)==1:
                 query += '\'' + lst[0].__str__() + '\''
             else:
@@ -152,7 +152,7 @@ class TagSelectForm(forms.ModelForm):
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=dbadmin")
             cur = conn.cursor()
-            cur.execute("REFRESH MATERIALIZED VIEW usable_table;")
+            cur.execute("REFRESH MATERIALIZED VIEW CONCURRENTLY usabletable;")
             conn.commit()
             cur.execute(query)
             lst = cur.fetchall()
