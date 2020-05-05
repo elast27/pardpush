@@ -47,7 +47,7 @@ class EventListView(ListView):
 class EventCreateView(CreateView):
     form_class = TagSelectForm
     model = Event
-    # fields = ('name', 'tag', 'date', 'location', 'message', )
+    #fields = ('name', 'tag', 'date', 'location', 'message', )
     template_name = 'notification/organizers/event_add_form.html'
 
     def form_valid(self, form):
@@ -69,8 +69,9 @@ class EventCreateView(CreateView):
 
 @method_decorator([login_required, organizer_required], name='dispatch')
 class EventUpdateView(UpdateView):
+    form_class = TagSelectForm
     model = Event
-    fields = ('name', 'tag', 'date', 'location', 'message', )
+    #fields = ('name', 'tag', 'date', 'location', 'message', )
     context_object_name = 'event'
     template_name = 'notification/organizers/event_change_form.html'
 
