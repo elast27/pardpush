@@ -22,6 +22,10 @@ class Migration(migrations.Migration):
             'CREATE MATERIALIZED VIEW studentphones AS SELECT user_id,phone FROM notification_user JOIN notification_student ON notification_user.id = notification_student.user_id;',
             reverse_sql='DROP MATERIALIZED VIEW studentphones;',
         ),
+        migrations.RunSQL(
+            "CREATE MATERIALIZED VIEW studentspertag AS SELECT student_id,string_agg(tagname,',') AS taglist FROM notification_student_interests RIGHT JOIN notification_tag ON tag_id = notification_tag.id GROUP BY 1;",
+            reverse_sql='DROP MATERIALIZED VIEW studentspertag;',
+        ),
         # migrations.RunSQL(
         #     'CREATE UNIQUE INDEX notification_studentphones_pk on studentphones(user_id);',
         #     reverse_sql='DROP INDEX notification_studentphones_pk;',

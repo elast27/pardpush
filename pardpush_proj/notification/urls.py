@@ -1,5 +1,5 @@
 from django.urls import include, path
-
+from django.conf.urls import url
 from .views import notification, students, organizers
 
 urlpatterns = [
@@ -16,4 +16,6 @@ urlpatterns = [
         path('event/<int:pk>/', organizers.EventUpdateView.as_view(), name='event_change'),
         path('event/<int:pk>/delete/', organizers.EventDeleteView.as_view(), name='event_delete'),
     ], 'notification'), namespace='organizers')),
+
+    url(r'^ajax/get_cost/$', notification.get_cost, name='get_cost'),
 ]

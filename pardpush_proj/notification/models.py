@@ -66,3 +66,11 @@ class StudentPhones(models.Model):
     class Meta:
         managed = False
         db_table = 'studentphones'
+
+class StudentsPerTag(models.Model):
+    student_id = models.IntegerField()
+    taglist = models.TextField()
+    
+    class Meta:
+        managed = False
+        db_table = 'studentspertag'
