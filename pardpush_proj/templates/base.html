@@ -1,4 +1,4 @@
-{% load static %}<!doctype html>
+{% load static %}{% load humanize %}<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -36,7 +36,11 @@
             </div>
             <div class="col-6 text-right">
               {% if user.is_authenticated %}
+                {% if user.is_organizer %}
+                <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. Budget: <strong>${{user.budget|floatformat:"2"|intcomma}}</strong> <a href="{% url 'logout' %}">Log out</a>.</p>
+                {% else %}
                 <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}">Log out</a>.</p>
+                {% endif %}
               {% else %}
                 <a href="{% url 'login' %}" class="btn btn-light" role="button">Log in</a>
                 <a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign up</a>
