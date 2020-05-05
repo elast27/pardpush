@@ -93,10 +93,10 @@ class StudentInterestsForm(forms.ModelForm):
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M'],
+        input_formats=['%d/%m/%Y %H:%M','%d/%m/%Y %-I:%M %p'],
         widget=forms.DateTimeInput(attrs={
             'class': 'form-control datetimepicker-input',
-            'data-target': '#datetimepicker1'
+            'data-target': '#datetimepicker1',
         })
     )
 
@@ -106,7 +106,7 @@ class TagSelectForm(forms.ModelForm):
         fields = ('name', 'tag', 'date', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
-            'data': DateForm,
+            'date': forms.DateTimeInput(format='%d/%m/%Y %-I:%M %p')
         }
         
     # Method for sending email notifications to users
