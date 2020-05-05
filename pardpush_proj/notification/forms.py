@@ -6,6 +6,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.forms.utils import ValidationError
+from tempus_dominus.widgets import DateTimePicker
 
 from notification.models import (Student, Tag, User, Event)
 from django.core.mail import send_mass_mail
@@ -93,20 +94,29 @@ class StudentInterestsForm(forms.ModelForm):
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M','%d/%m/%Y %-I:%M'],
-        widget=forms.DateTimeInput(attrs={
-            'class': 'form-control datetimepicker-input',
-            'data-target': '#datetimepicker1',
-        })
+        input_formats=['%d/%m/%Y %H:%M'], 
+        widget=DateTimePicker()
     )
 
 class TagSelectForm(forms.ModelForm):
+    date = forms.DateTimeField(
+        input_formats=['%m/%d/%Y %H:%M %p'], 
+        widget=DateTimePicker(
+            options={
+                'useCurrent': True,
+                'collapse': False,
+            },
+            attrs={
+                'append': 'fa fa-calendar',
+                'icon_toggle': True,
+            }
+        )
+    )
     class Meta:
         model = Event
         fields = ('name', 'tag', 'date', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
-            'date': forms.DateTimeInput(format='%d/%m/%Y %-I:%M')
         }
         
     # Method for sending email notifications to users

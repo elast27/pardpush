@@ -24,5 +24,11 @@
 {% endblock %}
 {% block scripts %}
   {{ block.super }}
+  {{ form.media }}
   <script src="{% static 'js/dynbudget.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+        $('.datetimepicker').datetimepicker({defaultDate: moment(), minDate: moment()});
+    });
+</script>
 {% endblock %}

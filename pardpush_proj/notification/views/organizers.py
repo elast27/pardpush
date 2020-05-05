@@ -14,6 +14,7 @@ from ..decorators import organizer_required
 from ..forms import OrganizerSignUpForm, DateForm, TagSelectForm
 from ..models import Event, User
 from django import forms
+import datetime
 
 
 class OrganizerSignUpView(CreateView):
@@ -54,6 +55,7 @@ class EventCreateView(CreateView):
         event = form.save(commit=False)
         event.owner = self.request.user
         some_var = self.request.POST.getlist('tag') # Gives a list of tags chosen by the user
+        event.date = datetime.datetime.strptime(self.request.POST.get('date'),'%m/%d/%Y %I:%M %p').strftime('%Y-%m-%d %H:%M:%S')
         event.save()
         for obj in some_var:
             event.tag.add(obj)
@@ -70,7 +72,7 @@ class EventCreateView(CreateView):
 @method_decorator([login_required, organizer_required], name='dispatch')
 class EventUpdateView(UpdateView):
     form_class = TagSelectForm
-    model = Event
+    moYdel = Event
     #fields = ('name', 'tag', 'date', 'location', 'message', )
     context_object_name = 'event'
     template_name = 'notification/organizers/event_change_form.html'
