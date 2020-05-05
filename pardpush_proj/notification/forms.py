@@ -48,7 +48,7 @@ class StudentSignUpForm(UserCreationForm):
             conn = psycopg2.connect('dbname=pardpush user=dbadmin')
             cur = conn.cursor()
             id = request.user.id
-            cur.execute('REFRESH MATERIALIZED VIEW CONCURRENTLY studentphones;')
+            cur.execute('REFRESH MATERIALIZED VIEW studentphones;')
             conn.commit()
             cur.execute('SELECT phone FROM studentphones WHERE user_id='+id.__str__()+';')
             tmp = cur.fetchone()
@@ -93,7 +93,7 @@ class StudentInterestsForm(forms.ModelForm):
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M','%d/%m/%Y %-I:%M %p'],
+        input_formats=['%d/%m/%Y %H:%M','%d/%m/%Y %-I:%M'],
         widget=forms.DateTimeInput(attrs={
             'class': 'form-control datetimepicker-input',
             'data-target': '#datetimepicker1',
@@ -106,7 +106,7 @@ class TagSelectForm(forms.ModelForm):
         fields = ('name', 'tag', 'date', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
-            'date': forms.DateTimeInput(format='%d/%m/%Y %-I:%M %p')
+            'date': forms.DateTimeInput(format='%d/%m/%Y %-I:%M')
         }
         
     # Method for sending email notifications to users
@@ -124,7 +124,7 @@ class TagSelectForm(forms.ModelForm):
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=dbadmin")
             cur = conn.cursor()
-            cur.execute("REFRESH MATERIALIZED VIEW CONCURRENTLY usabletable;")
+            cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
             cur.execute(query)
             lst = cur.fetchall()
@@ -154,7 +154,7 @@ class TagSelectForm(forms.ModelForm):
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=dbadmin")
             cur = conn.cursor()
-            cur.execute("REFRESH MATERIALIZED VIEW CONCURRENTLY usabletable;")
+            cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
             cur.execute(query)
             lst = cur.fetchall()

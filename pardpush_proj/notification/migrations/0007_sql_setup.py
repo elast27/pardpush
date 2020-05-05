@@ -6,24 +6,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notification', '0006_auto_20200504_2116'),
+        ('notification', '0009_student_email_unsub'),
     ]
 
     operations = [
         migrations.RunSQL(
-            'CREATE MATERIALIZED VIEW usabletable AS SELECT phone,email,tagname,sms_unsub,email_unsub FROM notification_user INNER JOIN (notification_student LEFT JOIN(notification_student_interests LEFT JOIN (notification_tag LEFT JOIN (notification_event LEFT JOIN notification_event_tag ON notification_event.id = notification_event_tag.event_id) AS inner1 ON notification_tag.id = inner1.tag_id) USING (tag_id)) AS inner2 ON notification_student.user_id = inner2.student_id) AS inner3 ON notification_user.id = inner3.user_id GROUP BY email,phone,tagname;',
+            'CREATE MATERIALIZED VIEW usabletable AS SELECT phone,email,tagname,sms_unsub,email_unsub FROM notification_user INNER JOIN (notification_student LEFT JOIN(notification_student_interests LEFT JOIN (notification_tag LEFT JOIN (notification_event LEFT JOIN notification_event_tag ON notification_event.id = notification_event_tag.event_id) AS inner1 ON notification_tag.id = inner1.tag_id) USING (tag_id)) AS inner2 ON notification_student.user_id = inner2.student_id) AS inner3 ON notification_user.id = inner3.user_id GROUP BY email,phone,tagname,sms_unsub,email_unsub;',
             reverse_sql='DROP MATERIALIZED VIEW usabletable;',
         ),
-        migrations.RunSQL(
-            'CREATE UNIQUE INDEX notification_usabletable_pk ON usabletable(phone);',
-            reverse_sql='DROP INDEX notification_usabletable_pk;',
-        ),
+        # migrations.RunSQL(
+        #     'CREATE UNIQUE INDEX notification_usabletable_pk ON usabletable(phone);',
+        #     reverse_sql='DROP INDEX notification_usabletable_pk;',
+        # ),
         migrations.RunSQL(
             'CREATE MATERIALIZED VIEW studentphones AS SELECT user_id,phone FROM notification_user JOIN notification_student ON notification_user.id = notification_student.user_id;',
             reverse_sql='DROP MATERIALIZED VIEW studentphones;',
         ),
-        migrations.RunSQL(
-            'CREATE UNIQUE INDEX notification_studentphones_pk on studentphones(user_id);',
-            reverse_sql='DROP INDEX notification_studentphones_pk;',
-        )
+        # migrations.RunSQL(
+        #     'CREATE UNIQUE INDEX notification_studentphones_pk on studentphones(user_id);',
+        #     reverse_sql='DROP INDEX notification_studentphones_pk;',
+        # )
     ]
