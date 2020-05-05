@@ -137,7 +137,7 @@ class TagSelectForm(forms.ModelForm):
         lst = sendQuery(query)
         subject = 'PardPush: ' + queryset.cleaned_data['name']
         body = 'New PardPush notification! \n Event Date: ' + str(queryset.cleaned_data['date'].strftime('%a, %b %d, %-I:%M %p')) + '\n' + 'Event Location: ' + queryset.cleaned_data['location'] + '\n' + 'Details: ' + queryset.cleaned_data['message']
-        msgs = [(subject,body,'pardpushhost@gmail.com',recipient) for recipient in lst] #hides recipient list from each recipient
+        msgs = [(subject,body,'PardPush <pardpushhost@gmail.com>',recipient) for recipient in lst] #hides recipient list from each recipient
         send_mass_mail(msgs,fail_silently=True)
 
     def send_SMS(self, request, queryset):
