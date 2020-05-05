@@ -8,9 +8,7 @@ from django.db import transaction
 from django.forms.utils import ValidationError
 
 from notification.models import (Student, Tag, User, Event)
-
-from django.core import mail
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mass_mail
 
 class OrganizerSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -113,30 +111,34 @@ class TagSelectForm(forms.ModelForm):
         
     # Method for sending email notifications to users
     def send_notification(self, request, queryset):
-        connection = mail.get_connection()
-
-        for obj in User.objects.all():
-            field_name = 'is_student'
-            field_object = User._meta.get_field(field_name)
-            field_value = getattr(obj, field_object.attname)
-            
-            if(str(field_value) == "True"):
-                field_name = 'email'
-                field_object = User._meta.get_field(field_name)
-                field_value = getattr(obj, field_object.attname)
-                
-                # Construct the body of the email
-                email = EmailMessage(
-                            queryset.cleaned_data['name'],
-                            'Event Date: ' + str(queryset.cleaned_data['date']) + '\n' 
-                            + 'Event Location: ' + queryset.cleaned_data['location'] + '\n'
-                            + '\n' + queryset.cleaned_data['message'], 
-                            'pardpushhost@gmail.com', # Host gmail
-                            [str(field_value)], # Recepient
-                    )
-                email.send()
-                
-        connection.close()
+        def createQuery(lst):
+            query = 'SELECT email FROM usabletable WHERE tagname='
+            if len(lst)==1:
+                query += '\'' + lst[0].__str__() + '\''
+            else:
+                for i in range(0, len(lst)-1):
+                    query += '\'' + lst[i].__str__()+'\' OR tagname='
+                query += '\'' + lst[-1].__str__() + '\''
+                query += " GROUP BY email"
+            return query
+        def sendQuery(query):
+            conn = psycopg2.connect("dbname=pardpush user=dbadmin")
+            cur = conn.cursor()
+            cur.execute("REFRESH MATERIALIZED VIEW CONCURRENTLY usabletable;")
+            conn.commit()
+            cur.execute(query)
+            lst = cur.fetchall()
+            cur.close()
+            conn.close()
+            return lst
+        tags = list(queryset.cleaned_data['tag'])
+        msg = queryset.cleaned_data['name'] + ": " + queryset.cleaned_data['date'].strftime('%a, %b %d, %-I:%M %p') + " @ " + queryset.cleaned_data['location'] + "\n" + queryset.cleaned_data['message']
+        query = createQuery(tags)
+        lst = sendQuery(query)
+        subject = 'PardPush: ' + queryset.cleaned_data['name']
+        body = 'New PardPush notification! \n Event Date: ' + str(queryset.cleaned_data['date'].strftime('%a, %b %d, %-I:%M %p')) + '\n' + 'Event Location: ' + queryset.cleaned_data['location'] + '\n' + 'Details: ' + queryset.cleaned_data['message']
+        msgs = [(subject,body,'pardpushhost@gmail.com',recipient) for recipient in lst] #hides recipient list from each recipient
+        send_mass_mail(msgs,fail_silently=True)
 
     def send_SMS(self, request, queryset):
         def createQuery(lst):

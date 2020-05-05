@@ -56,7 +56,7 @@ class EventCreateView(CreateView):
         some_var = self.request.POST.getlist('tag') # Gives a list of tags chosen by the user 
         succ = form.send_SMS(self.request, form) #Send SMS notification
         if succ[0]:
-            #   form.send_notification(self.request, form) # Send email notification
+            form.send_notification(self.request, form) # Send email notification
             event.save()
             for obj in some_var:
                 event.tag.add(obj)
