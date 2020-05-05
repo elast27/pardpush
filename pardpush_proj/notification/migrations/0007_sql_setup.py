@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            'CREATE MATERIALIZED VIEW usabletable AS SELECT phone,email,tagname FROM notification_user INNER JOIN (notification_student LEFT JOIN(notification_student_interests LEFT JOIN (notification_tag LEFT JOIN (notification_event LEFT JOIN notification_event_tag ON notification_event.id = notification_event_tag.event_id) AS inner1 ON notification_tag.id = inner1.tag_id) USING (tag_id)) AS inner2 ON notification_student.user_id = inner2.student_id) AS inner3 ON notification_user.id = inner3.user_id GROUP BY email,phone,tagname;',
+            'CREATE MATERIALIZED VIEW usabletable AS SELECT phone,email,tagname,sms_unsub,email_unsub FROM notification_user INNER JOIN (notification_student LEFT JOIN(notification_student_interests LEFT JOIN (notification_tag LEFT JOIN (notification_event LEFT JOIN notification_event_tag ON notification_event.id = notification_event_tag.event_id) AS inner1 ON notification_tag.id = inner1.tag_id) USING (tag_id)) AS inner2 ON notification_student.user_id = inner2.student_id) AS inner3 ON notification_user.id = inner3.user_id GROUP BY email,phone,tagname;',
             reverse_sql='DROP MATERIALIZED VIEW usabletable;',
         ),
         migrations.RunSQL(

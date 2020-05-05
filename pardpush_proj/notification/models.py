@@ -40,6 +40,8 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     interests = models.ManyToManyField(Tag, related_name='interested_students')
     phone = PhoneField(blank=True, verbose_name='phone')
+    sms_unsub = models.BooleanField(default=False)
+    email_unsub = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -50,10 +52,12 @@ class UsableTable(models.Model):
     phone = models.CharField(max_length=31)
     email = models.CharField(max_length=254)
     tagname = models.CharField(max_length=30)
+    email_unsub = models.BooleanField()
+    sms_unsub = models.BooleanField()
     
     class Meta:
         managed = False
-        db_table = 'usable_table'
+        db_table = 'usabletable'
 
 class StudentPhones(models.Model):
     user_id = models.IntegerField()

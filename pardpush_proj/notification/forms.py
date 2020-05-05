@@ -112,14 +112,14 @@ class TagSelectForm(forms.ModelForm):
     # Method for sending email notifications to users
     def send_notification(self, request, queryset):
         def createQuery(lst):
-            query = 'SELECT email FROM usabletable WHERE tagname='
+            query = 'SELECT email FROM usabletable WHERE (tagname='
             if len(lst)==1:
-                query += '\'' + lst[0].__str__() + '\''
+                query += '\'' + lst[0].__str__() + '\')'
             else:
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += " GROUP BY email"
+                query += ") AND (email_unsub=FALSE) GROUP BY email"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=dbadmin")
@@ -142,14 +142,14 @@ class TagSelectForm(forms.ModelForm):
 
     def send_SMS(self, request, queryset):
         def createQuery(lst):
-            query = 'SELECT phone FROM usabletable WHERE tagname='
+            query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
-                query += '\'' + lst[0].__str__() + '\''
+                query += '\'' + lst[0].__str__() + '\')'
             else:
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += " GROUP BY phone"
+                query += ") AND (sms_unsub=FALSE) GROUP BY phone"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=dbadmin")
@@ -180,7 +180,7 @@ class TagSelectForm(forms.ModelForm):
                         to=i
                     )
                 except TwilioRestException:
-                    #maybe do something about the person that unsubscribed here
+                    #stu = Student.objects.filter(phone=i[0]).update(sms_unsub=True) #enable this in the future when implementation for "Start" sms response is done
                     print(i.__str__() + " unsubscribed; no message sent")
         def getBudget(request):
             conn = psycopg2.connect('dbname=pardpush user=dbadmin')
