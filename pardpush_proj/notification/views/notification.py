@@ -18,6 +18,11 @@ def home(request):
             return redirect('students:event_list')
     return render(request, 'notification/home.html')
 
+def check_username(request):
+    if request.user.email == None: 
+        return redirect('signup/student/')
+    return redirect('home')
+
 def get_cost(request):
     def createQuery(lst):
         query = 'SELECT COUNT(student_id) FROM studentspertag WHERE (taglist LIKE ' 
