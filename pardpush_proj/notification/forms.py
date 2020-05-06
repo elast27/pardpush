@@ -71,6 +71,7 @@ class StudentSignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
+        fields = "__all__"
 
     @transaction.atomic
     def save(self):
