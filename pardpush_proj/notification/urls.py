@@ -18,5 +18,5 @@ urlpatterns = [
     ], 'notification'), namespace='organizers')),
 
     url(r'^ajax/get_cost/$', notification.get_cost, name='get_cost'),
-    url('check',students.check_username, name='check'),
+    url('check',notification.check_username, name='check'),
 ]
