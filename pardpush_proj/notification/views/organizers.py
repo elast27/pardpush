@@ -72,7 +72,7 @@ class EventCreateView(CreateView):
 @method_decorator([login_required, organizer_required], name='dispatch')
 class EventUpdateView(UpdateView):
     form_class = TagSelectForm
-    moYdel = Event
+    model = Event
     #fields = ('name', 'tag', 'date', 'location', 'message', )
     context_object_name = 'event'
     template_name = 'notification/organizers/event_change_form.html'
