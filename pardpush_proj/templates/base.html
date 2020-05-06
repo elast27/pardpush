@@ -39,6 +39,15 @@
               {% if user.is_authenticated %}
                 {% if user.is_organizer %}
                 <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. Budget: <strong>${{user.budget|floatformat:"2"|intcomma}}</strong> <a href="{% url 'logout' %}">Log out</a>.</p>
+                {% if user.budget == 0 %}
+                  <div class="alert alert-danger">
+                    <strong>Your budget is empty.</strong> Please contact the program chair to add funds.
+                  </div>
+                  {% elif user.budget <= 5 %}
+                  <div class="alert alert-warning">
+                    <strong>Your budget is low.</strong> Please contact the program chair to add funds.
+                  </div>
+                  {% endif %}
                 {% else %}
                 <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}">Log out</a>.</p>
                 {% endif %}
