@@ -27,7 +27,7 @@
   <script src="{% static 'js/dynbudget.js' %}"></script>
   <script type="text/javascript">
      $(function () {
-        $('#id_date').datetimepicker({minDate: moment().subtract(10,'minutes'), defaultDate: moment()});
+        $('#id_date').datetimepicker({minDate: moment().subtract(10,'minutes'), maxDate: moment().add(1,'month'), defaultDate: moment()});
     });
   </script>
 {% endblock %}
