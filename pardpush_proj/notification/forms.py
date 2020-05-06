@@ -26,7 +26,7 @@ class OrganizerSignUpForm(UserCreationForm):
 class StudentSignUpForm(forms.ModelForm):
     # Email field
     #email = forms.EmailField(required=True, help_text='Must be a valid lafayette.edu or gmail account.')
-    fields = ('phone', 'interests',)
+    fields = ('phone', 'interests', )
     
     phone = forms.CharField(required=True)
     interests = forms.ModelMultipleChoiceField(
