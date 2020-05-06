@@ -64,6 +64,7 @@ AUTHENTICATION_BACKENDS = [
 
 CAS_SERVER_URL = 'https://cas.lafayette.edu/cas/login'
 CAS_VERSION = '3'
+CAS_REDIRECT_URL = 'check'
 CAS_LOGOUT_COMPLETELY = True
 CAS_IGNORE_REFERER = True
 CAS_RETRY_LOGIN = True
@@ -141,11 +142,11 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'notification.User'
 
 # LOGIN_URL = 'login'
-LOGIN_URL = 'check'
+LOGIN_URL = 'login'
 
 LOGOUT_URL = 'logout'
 
-LOGIN_REDIRECT_URL = 'check'
+LOGIN_REDIRECT_URL = 'home'
 
 LOGOUT_REDIRECT_URL = 'home'
 
