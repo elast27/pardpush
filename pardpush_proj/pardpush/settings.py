@@ -140,11 +140,12 @@ STATICFILES_DIRS = [
 
 AUTH_USER_MODEL = 'notification.User'
 
-LOGIN_URL = 'login'
+# LOGIN_URL = 'login'
+LOGIN_URL = 'check'
 
 LOGOUT_URL = 'logout'
 
-LOGIN_REDIRECT_URL = 'signup'
+LOGIN_REDIRECT_URL = 'home'
 
 LOGOUT_REDIRECT_URL = 'home'
 
