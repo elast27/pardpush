@@ -11,3 +11,7 @@ def less_than_two_days_old(value):
 @register.filter
 def past(value):
     return (value.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now()
+
+@register.filter
+def future(value):
+    return (value.replace(tzinfo=None) - timedelta(hours=4)) > datetime.now()
