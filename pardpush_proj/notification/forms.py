@@ -23,7 +23,7 @@ class OrganizerSignUpForm(UserCreationForm):
         return user
 
 
-class StudentSignUpForm(UserCreationForm):
+class StudentSignUpForm(forms.ModelForm):
     # Email field
     email = forms.EmailField(required=True, help_text='Must be a valid lafayette.edu or gmail account.')
     phone = forms.CharField(required=True)
@@ -68,14 +68,14 @@ class StudentSignUpForm(UserCreationForm):
             #maybe do something about the person that unsubscribed here
             print(i.__str__() + " unsubscribed; no message sent")
 
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
 
     @transaction.atomic
     def save(self):
-        user = super().save(commit=False)
+        #user = super().save(commit=False)
         user.is_student = True
-        user.email = self.cleaned_data["email"]
+        user.email = self.cleaned_data["username"]+"@lafayette.edu"
         user.save()
         student = Student.objects.create(user=user)
         student.interests.add(*self.cleaned_data.get('interests'))
