@@ -145,7 +145,7 @@ LOGIN_URL = 'check'
 
 LOGOUT_URL = 'logout'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'check'
 
 LOGOUT_REDIRECT_URL = 'home'
 
