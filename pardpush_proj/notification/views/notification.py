@@ -12,7 +12,6 @@ class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
 def home(request):
-    check_username(request)
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('admin/')
