@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 @receiver(cas_user_authenticated)
 def update_role(sender, user=None, attributes=None, **kwargs):
-    if created:
+    if kwargs[0]:
         role = attributes['eduPersonEntitlement'].split('/')[3]
         if role == 'faculty':
             user.is_organizer = True
