@@ -4,7 +4,10 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from ..models import StudentsPerTag
 import psycopg2
+from datetime import datetime, timedelta
+from django.utils import timezone
 
+now = timezone.now()
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
@@ -19,7 +22,7 @@ def home(request):
     return render(request, 'notification/home.html')
 
 def check_username(request):
-    if request.user.email == None: 
+    if (request.user.date_joined).replace(tzinfo=None) + timedelta(minutes=1) - timedelta(hours=4) > datetime.now(): 
         return redirect('signup/student/')
     return redirect('home')
 
@@ -41,7 +44,7 @@ def get_cost(request):
                 'cost': 0
             })
         cst = 0
-        conn = psycopg2.connect('dbname=pardpush user=dbadmin')
+        conn = psycopg2.connect('dbname=pardpush user=matthewstern')
         cur = conn.cursor()
         cur.execute('REFRESH MATERIALIZED VIEW studentspertag;')
         conn.commit()
