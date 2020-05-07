@@ -13,7 +13,7 @@
     Tags:{% for tag in user.student.interests.all %} {{ tag.get_html_badge }}{% endfor %}
     <a href="{% url 'students:student_interests' %}"><small>(update interests)</small></a>
     {% if user.is_student %}
-      <a href='' class='btn btn-primary'>Organizer View</a>
+      <a href='/students/' class='btn btn-primary'>Organizer View</a>
     {% endif %}
     <a href="{% url 'organizers:event_add' %}" class="btn btn-primary mb-3" role="button">Add event</a>
   </p>
