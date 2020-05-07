@@ -24,7 +24,11 @@ class StudentSignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
+        #user = form.save()
+        student = Student.objects.create(self.request.user)
+        student.interests.add(*form.cleaned_data.get('interests'))
+        student.phone=form.cleaned_data["phone"]
+        student.save()
         #login(self.request, user)
         form.send_initSMS(self.request, form) #sends welcome sms to the user
         return redirect('students:event_list')
