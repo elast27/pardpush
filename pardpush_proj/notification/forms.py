@@ -47,7 +47,7 @@ class StudentSignUpForm(forms.ModelForm):
         auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
         client = Client(account_sid, auth_token)
         def getStudentNumber(id):
-            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
+            conn = psycopg2.connect("dbname='pardpush' user='dbadmin' host='localhost' password='MeqmZpye2w4CUGPEi9'")
             cur = conn.cursor()
             id = request.user.id
             cur.execute('REFRESH MATERIALIZED VIEW studentphones;')
