@@ -25,7 +25,8 @@ class StudentSignUpView(CreateView):
 
     def form_valid(self, form):
         #user = form.save()
-        student = Student.objects.create(self.request.user)
+        user = self.request.user
+        student = Student.objects.create(user)
         student.interests.add(*form.cleaned_data.get('interests'))
         student.phone=form.cleaned_data["phone"]
         student.save()
