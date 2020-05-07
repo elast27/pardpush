@@ -9,13 +9,12 @@
     </ol>
   </nav>
   <h2 class="mb-3">My Events</h2>
+  {% if user.is_student %}
+    <a href='/students/' class='btn btn-secondary'><i class="fas fa-exchange-alt"></i>Student Dashboard</a>
+  {% endif %}
   <p class="text-muted">
     <a href="{% url 'organizers:event_add' %}" class="btn btn-primary mb-3" role="button">Add event</a>
   </p>
-  <p>
-    {% if user.is_student %}
-      <a href='/students/' class='btn btn-primary'>Student Dashboard</a>
-    {% endif %}</p>
   <div class="card">
     <table class="table mb-0">
       <thead>

@@ -1,8 +1,8 @@
 <h2>Events</h2>
+{% if user.is_organizer %}
+    <a href='/organizers/' class='btn btn-secondary'><i class="fas fa-exchange-alt"></i>Organizer Dashboard</a>
+{% endif %}
 <p class="text-muted">
   Tags:{% for tag in user.student.interests.all %} {{ tag.get_html_badge }}{% endfor %}
   <a href="{% url 'students:student_interests' %}"><small>(update interests)</small></a>
-  {% if user.is_organizer %}
-    <a href='/organizers/' class='btn btn-primary'>Organizer Dashboard</a>
-  {% endif %}
 </p>
