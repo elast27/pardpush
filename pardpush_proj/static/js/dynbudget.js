@@ -16,7 +16,7 @@ function getCookie(name) {
 
 $('.form-check-input').click(function () {
     var tagnames;
-    tagnames = $("input:checked").next('label').map(function () {
+    tagnames = $("input:checked").parent().map(function () {
         return $(this).text().trim();
     }).get();
     $.ajax(
