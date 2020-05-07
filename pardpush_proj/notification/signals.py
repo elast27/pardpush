@@ -5,6 +5,7 @@ from django.dispatch import receiver
 def update_role(sender, user=None, attributes=None, **kwargs):
     if kwargs.get('created',True):
         role = attributes['eduPersonEntitlement'].split('/')[3]
+        user.email = attributes['username']+'@lafayette.edu'
         if role == 'faculty':
             user.is_organizer = True
         else:
