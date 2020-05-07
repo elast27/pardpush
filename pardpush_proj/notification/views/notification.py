@@ -22,6 +22,8 @@ def home(request):
     return render(request, 'notification/home.html')
 
 def check_username(request):
+    if request.user.is_anonymous:
+        return home(request)
     if (request.user.date_joined).replace(tzinfo=None) + timedelta(seconds=10) - timedelta(hours=4) > datetime.now(): 
         return redirect('student_signup')
     return home(request)
