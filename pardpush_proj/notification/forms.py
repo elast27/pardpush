@@ -75,8 +75,7 @@ class StudentSignUpForm(forms.ModelForm):
 
     @transaction.atomic
     def save(self):
-        #user = super().save(commit=False)
-        user.is_student = True
+        user = super().save(commit=False)
         user.save()
         student = Student.objects.create(user=user)
         student.interests.add(*self.cleaned_data.get('interests'))
