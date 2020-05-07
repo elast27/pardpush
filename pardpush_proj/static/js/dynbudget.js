@@ -28,6 +28,7 @@ $('.form-check-input').click(function () {
                 csrfmiddlewaretoken: getCookie('csrftoken')
             },
             success: function (data) {
+                console.log(data.cost)
                 $(".puthere").text("$" + parseFloat(data.cost).toFixed(2))
             }
         })
