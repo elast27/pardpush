@@ -23,7 +23,7 @@ def home(request):
 
 def check_username(request):
     if (request.user.date_joined).replace(tzinfo=None) + timedelta(minutes=1) - timedelta(hours=4) > datetime.now(): 
-        return redirect('signup/student/')
+        return redirect('student_signup')
     pass
 
 def get_cost(request):
