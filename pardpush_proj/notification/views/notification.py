@@ -22,9 +22,9 @@ def home(request):
     return render(request, 'notification/home.html')
 
 def check_username(request):
-    if (request.user.date_joined).replace(tzinfo=None) + timedelta(minutes=1) - timedelta(hours=4) > datetime.now(): 
+    if (request.user.date_joined).replace(tzinfo=None) + timedelta(seconds=10) - timedelta(hours=4) > datetime.now(): 
         return redirect('student_signup')
-    pass
+    return home(request)
 
 def get_cost(request):
     def createQuery(lst):
