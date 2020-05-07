@@ -12,6 +12,7 @@ class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
 def home(request):
+    check_username(request)
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('admin/')
@@ -24,7 +25,7 @@ def home(request):
 def check_username(request):
     if (request.user.date_joined).replace(tzinfo=None) + timedelta(minutes=1) - timedelta(hours=4) > datetime.now(): 
         return redirect('signup/student/')
-    return redirect('home')
+    pass
 
 def get_cost(request):
     def createQuery(lst):
