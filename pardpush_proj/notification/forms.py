@@ -47,7 +47,7 @@ class StudentSignUpForm(forms.ModelForm):
         auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
         client = Client(account_sid, auth_token)
         def getStudentNumber(id):
-            conn = psycopg2.connect("dbname='pardpush' user='dbadmin' host='localhost' password='MeqmZpye2w4CUGPEi9'")
+            conn = psycopg2.connect("dbname='pardpush' user='pardpushs'")
             cur = conn.cursor()
             id = request.user.id
             cur.execute('REFRESH MATERIALIZED VIEW studentphones;')
@@ -132,7 +132,7 @@ class TagSelectForm(forms.ModelForm):
                 query += ") AND (email_unsub=FALSE) GROUP BY email"
             return query
         def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=dbadmin")
+            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
             cur = conn.cursor()
             cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
@@ -162,7 +162,7 @@ class TagSelectForm(forms.ModelForm):
                 query += ") AND (sms_unsub=FALSE) GROUP BY phone"
             return query
         def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=dbadmin")
+            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
             cur = conn.cursor()
             cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
@@ -193,7 +193,7 @@ class TagSelectForm(forms.ModelForm):
                     #stu = Student.objects.filter(phone=i[0]).update(sms_unsub=True) #enable this in the future when implementation for "Start" sms response is done
                     print(i.__str__() + " unsubscribed; no message sent")
         def getBudget(request):
-            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
+            conn = psycopg2.connect('dbname=pardpush user=pardpushs')
             cur = conn.cursor()
             id = request.user.id
             cur.execute('SELECT budget FROM notification_user WHERE id='+id.__str__()+';')
@@ -202,7 +202,7 @@ class TagSelectForm(forms.ModelForm):
             conn.close()
             return tmp
         def setBudget(request,val):
-            conn = psycopg2.connect('dbname=pardpush user=dbadmin')
+            conn = psycopg2.connect('dbname=pardpush user=pardpushs')
             cur = conn.cursor()
             id = request.user.id
             cur.execute('UPDATE notification_user SET budget=' + val.__str__() + ' where id=' + id.__str__() + ';')

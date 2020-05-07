@@ -46,7 +46,7 @@ def get_cost(request):
                 'cost': 0
             })
         cst = 0
-        conn = psycopg2.connect('dbname=pardpush user=matthewstern')
+        conn = psycopg2.connect('dbname=pardpush user=pardpushs')
         cur = conn.cursor()
         cur.execute('REFRESH MATERIALIZED VIEW studentspertag;')
         conn.commit()
