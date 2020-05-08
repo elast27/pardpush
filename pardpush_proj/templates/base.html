@@ -38,7 +38,7 @@
             <div class="col-6 text-right">
               {% if user.is_authenticated %}
                 {% if user.is_organizer %}
-                <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. Budget: <strong>${{user.budget|floatformat:"2"|intcomma}}</strong> <a href="{% url 'logout' %}">Log out</a>.</p>
+                <p class="pt-3">Budget: <strong>${{user.budget|floatformat:"2"|intcomma}} | </strong> <i class="fa fa-user"></i><strong>{{ user.username }} | </strong> <a href="{% url 'logout' %}">Log out</a>.</p>
                 {% else %}
                 <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}">Log out</a>.</p>
                 {% endif %}
