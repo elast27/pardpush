@@ -247,7 +247,7 @@ class TagSelectForm(forms.ModelForm):
                 query += ") AND (sms_unsub=FALSE) GROUP BY phone"
             return query
         def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=matthewstern")
+            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
             cur = conn.cursor()
             cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
