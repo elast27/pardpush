@@ -37,7 +37,7 @@
         {% for event in events %}
           {% if event.date|less_than_two_days_old %}
             {% if event.date|past %}
-            <tr>
+            <tr data-toggle="popover" data-trigger="hover" title="Event Details">
               <td style="display:none">{{ event.id }}</td>
               <td class="align-middle">{{ event.name }}</td>
               <td class="align-middle">{{ event.date|naturaltime }}</td>
@@ -62,14 +62,14 @@
                 {% endfor %}
               </td>
               <td class="text-right">
-                <a href="{% url 'organizers:event_change' event.pk %}" class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
+                <a href="{% url 'organizers:event_change' event.pk %}" style="color:#17a2b8;"><i class="fa fa-edit"></i></a>
               </td>
             </tr>
             {% endif %}
           {% endif %}
         {% empty %}
           <tr>
-            <td class="bg-light text-center font-italic" colspan="5">You haven't created any event yet.</td>
+            <td class="bg-light text-center font-italic" colspan="5">No events created in the past two days.</td>
           </tr>
         {% endfor %}
       </tbody>
