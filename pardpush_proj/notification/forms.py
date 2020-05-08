@@ -15,8 +15,6 @@ from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
 from datetime import datetime,timedelta,timezone
 
-rc = get_redis_connection('default')
-scheduler = Scheduler(connection=rc) #for scheduled blasts
 
 class OrganizerSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -233,6 +231,10 @@ class TagSelectForm(forms.ModelForm):
             return (False,cost)
 
     def schedule(self, request, queryset):
+        
+        rc = get_redis_connection('default')
+        scheduler = Scheduler(connection=rc) #for scheduled blasts
+        
         def createQuery(lst):
             query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
