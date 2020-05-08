@@ -1,7 +1,21 @@
-<h2>Events</h2>
-{% if user.is_organizer %}
-    <a href='/organizers/' class='btn btn-secondary'><i class="fas fa-exchange-alt"></i>Organizer Dashboard</a>
-{% endif %}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Events</h2>
+  </div>
+  <div class="col-md-6">
+    <div class="row float-right">
+      <div class="col-md-10 text-right">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group mr-auto" role="group" aria-label="First group">
+            {% if user.is_organizer %}
+              <a href='/organizers/' class='btn btn-outline-secondary mb-3'>Organizer Dashboard</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <p class="text-muted">
   Tags:{% for tag in user.student.interests.all %} {{ tag.get_html_badge }}{% endfor %}
   <a href="{% url 'students:student_interests' %}"><small>(Change Settings)</small></a>
