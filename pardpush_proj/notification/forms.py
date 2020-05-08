@@ -226,7 +226,7 @@ class TagSelectForm(forms.ModelForm):
         #budget = getBudget(request)
         if cost <= request.user.budget:
             sendLoop(lst,msg)
-            setBudget(request,budget[0]-cost)
+            setBudget(request,request.user.budget-cost)
             return (True,cost)
         else:
             return (False,cost)
