@@ -14,10 +14,10 @@
           </div>
         </div>
       </div>
-      <div class="form-group col-md-6 mb-3 pl-4 pt-4 mt-3">
+      <div class="form-group col-md-6 mb-3 pl-4 pt-3 mt-3">
         <div class="card">
           <div class="card-body">
-            <div class="form-row">
+            <div class="form-row pb-2 mb-1">
               <h4><strong>Communications Preferences</strong></h4>
               <div class="col-md-6 pt-3 pb-5 mb-4">
                 {{ form.email_unsub|as_crispy_field}}
@@ -29,7 +29,6 @@
           </div>
         </div>
       </div>
-
     </div>
     <button type="submit" class="btn btn-success">Save changes</button>
     <a href="{% url 'students:event_list' %}" class="btn btn-outline-secondary">Nevermind</a>
