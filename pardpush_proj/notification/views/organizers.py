@@ -94,6 +94,11 @@ class EventUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('organizers:event_change', kwargs={'pk': self.object.pk})
+    def form_valid(self,form):
+        messages.success(self.request, 'The event was update successfully!')
+        return redirect('home')
+
+
 
 
 @method_decorator([login_required, organizer_required], name='dispatch')

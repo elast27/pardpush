@@ -1,27 +1,59 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'organizers:event_change_list' %}">My Events</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+      <li class="breadcrumb-item active" aria-current="page">Edit Event: {{ event.name }}</li>
     </ol>
   </nav>
   <h2 class="mb-3">
-    {{ event.name }}
-    <a href="{% url 'organizers:event_change_list' %}" class="btn btn-primary float-right">Go Back</a>
+    Edit Event: {{ event.name }}
   </h2>
   <div class="row mb-3">
-    <div class="col-md-6 col-sm-8 col-12">
+    <div class="pl-3 pr-3" style="width:100%;">
       <form method="post" novalidate>
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-0">
+            {{ form.name|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ form.date|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ form.location|as_crispy_field}}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6 mb-0">
+            {{ form.message|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-6 mb-0 pl-4 pt-4 mt-2">
+            <div class="card">
+              <div class="card-body">
+                {{ form.tag|as_crispy_field}}
+              </div>
+            </div>
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary">Save changes</button>
         <a href="{% url 'organizers:event_change_list' %}" class="btn btn-outline-secondary" role="button">Nevermind</a>
         <a href="{% url 'organizers:event_delete' event.pk %}" class="btn btn-danger float-right">Delete</a>
       </form>
     </div>
   </div>
+{% endblock %}
+{% block scripts %}
+  {{ block.super }}
+  {{ form.media }}
+  <script src="{% static 'js/dynbudget.js' %}"></script>
+  <script type="text/javascript">
+     $(function () {
+        $('#id_date').datetimepicker({minDate: moment().subtract(10,'minutes'), maxDate: moment().add(1,'month'), defaultDate: moment()});
+    });
+  </script>
 {% endblock %}
