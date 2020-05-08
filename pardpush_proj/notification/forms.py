@@ -94,10 +94,10 @@ class StudentInterestsForm(forms.ModelForm):
         model = Student
         fields = ('phone', 'interests', 'email_sub', 'sms_sub',)
         widgets = {
-            'phone' : forms.CharField
-            'interests': forms.CheckboxSelectMultiple
-            'email_sub': forms.CheckboxInput
-            'sms_sub': forms.CheckboxInput
+            'phone': forms.CharField,
+            'interests': forms.CheckboxSelectMultiple,
+            'email_sub': forms.CheckboxInput,
+            'sms_sub': forms.CheckboxInput,
         }
 
 class DateForm(forms.Form):
