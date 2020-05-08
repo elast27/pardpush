@@ -3,11 +3,6 @@
 {% load custom_filters %}
 
 {% block content %}
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">My Events</li>
-    </ol>
-  </nav>
   <h2 class="mb-3">My Events</h2>
   {% if user.is_student %}
     <a href='/students/' class='btn btn-secondary'><i class="fas fa-exchange-alt"></i>Student Dashboard</a>
