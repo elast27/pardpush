@@ -140,7 +140,7 @@ class TagSelectForm(forms.ModelForm):
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += ") AND (email_unsub=FALSE) GROUP BY email"
+                query += ") AND (email_unsub='f') GROUP BY email"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=pardpushs")
@@ -170,7 +170,7 @@ class TagSelectForm(forms.ModelForm):
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += ") AND (sms_unsub=FALSE) GROUP BY phone"
+                query += ") AND (sms_unsub='f') GROUP BY phone"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=pardpushs")
