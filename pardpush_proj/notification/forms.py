@@ -135,7 +135,7 @@ class TagSelectForm(forms.ModelForm):
         def createQuery(lst):
             query = 'SELECT email FROM usabletable WHERE (tagname='
             if len(lst)==1:
-                query += '\'' + lst[0].__str__() + '\')'
+                query += '\'' + lst[0].__str__() + '\') AND (email_unsub='f') GROUP BY email;'
             else:
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
@@ -165,7 +165,7 @@ class TagSelectForm(forms.ModelForm):
         def createQuery(lst):
             query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
-                query += '\'' + lst[0].__str__() + '\')'
+                query += '\'' + lst[0].__str__() + '\') AND (sms_unsub='f') GROUP BY phone;'
             else:
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
