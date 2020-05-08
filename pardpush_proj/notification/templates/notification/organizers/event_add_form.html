@@ -6,15 +6,37 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'organizers:event_change_list' %}">My Events</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Add a new event</li>
+      <li class="breadcrumb-item active" aria-current="page">Add Event</li>
     </ol>
   </nav>
-  <h2 class="mb-3">Add a new event</h2>
+  <h2 class="mb-3">Add Event</h2>
   <div class="row">
-    <div class="col-md-6 col-sm-8 col-12">
+    <div class="pl-3 pr-3" style="width:100%;">
       <form method="post" novalidate>
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="form-row">
+          <div class="form-group col-md-4 mb-0">
+            {{ form.name|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ form.date|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            {{ form.location|as_crispy_field}}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6 mb-0">
+            {{ form.message|as_crispy_field}}
+          </div>
+          <div class="form-group col-md-6 mb-0 pl-4 pt-4 mt-2">
+            <div class="card">
+              <div class="card-body">
+                {{ form.tag|as_crispy_field}}
+              </div>
+            </div>
+          </div>
+        </div>
         <button type="submit" class="btn btn-success">Send Blast (<span class="badge puthere">$0.00</span>)</button>
         <a href="{% url 'organizers:event_change_list' %}" class="btn btn-outline-secondary" role="button">Nevermind</a>
       </form>
