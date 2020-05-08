@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django_cas_ng',
     'tempus_dominus',
     'django_rq',
-    'scheduler',
+    'django_redis',
 ]
 
 MIDDLEWARE = [
