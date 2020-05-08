@@ -119,12 +119,11 @@ class TagSelectForm(forms.ModelForm):
         )
     )
     delta = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'0','min':'0','max': '60','type': 'number'}))
-    #timeunit = forms.ChoiceField(widget=forms.widgets.ChoiceWidget(attrs={'class':'form-control'},choices=('minutes','hours','days')),initial='hours')
-    #shift = forms.ChoiceField(widget=forms.widgets.ChoiceWidget(attrs={'class':'form-control'},choices=('before','after')),initial='before')
+    timeunit = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','minutes'),('2','hours'),('3','days')))))
+    shift = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','before'),('2','after'))))
     class Meta:
         model = Event
-        #fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
-        fields = ('name', 'tag', 'date', 'delta', 'location', 'message', )
+        fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
         }
@@ -257,11 +256,11 @@ class TagSelectForm(forms.ModelForm):
         cost = len(lst) * .00562
         if cost <= request.user.budget:
             date = queryset.cleaned_data['date']
-            shift = queryset.cleaned_data['shift']
+            timeshift = queryset.cleaned_data['timeshift']
             delta = queryset.cleaned_data['delta']
             timeunit = queryset.cleaned_data['timeunit']
             if timeunit == 'minutes':
-                if(shift == "Before"):
+                if(timeshift == "Before"):
                     scheduled_time = date - timedelta(minutes=delta)
                 else:
                     scheduled_time = date + timedelta(minutes=delta)
@@ -270,7 +269,7 @@ class TagSelectForm(forms.ModelForm):
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             elif timeunit == 'hours':
-                if(shift == "Before"):
+                if(timeshift == "Before"):
                     scheduled_time = date - timedelta(hours=delta)
                 else:
                     scheduled_time = date + timedelta(hours=delta)
@@ -279,7 +278,7 @@ class TagSelectForm(forms.ModelForm):
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
-                if(shift == "Before"):
+                if(timeshift == "Before"):
                     scheduled_time = date - timedelta(days=delta)
                 else:
                     scheduled_time = date + timedelta(days=delta)
