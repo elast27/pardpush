@@ -24,57 +24,59 @@
   </div>
 </div>
   <div class="card">
-    <table class="table mb-0 table-striped">
-      <thead>
-        <tr>
-          <th class="align-middle">Event</th>
-          <th class="align-middle">Date</th>
-          <th class="align-middle">Location</th>
-          <th class="text-right">Tags</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for event in events %}
-          {% if event.owner.id == user.id %}
-            {% if event.date|less_than_two_days_old %}
-              {% if event.date|past %}
-              <tr data-toggle="popover" data-trigger="hover" title="Event Details">
-                <td style="display:none">{{ event.id }}</td>
-                <td class="align-middle">{{ event.name }}</td>
-                <td class="align-middle">{{ event.date|naturaltime }}</td>
-                <td class="align-middle">{{ event.location }}</td>
-                <td class="text-right">
-                  {% for tag in event.tag.all %}
-                    {{ tag.get_html_badge }}
-                  {% endfor %}
-                </td>
-                <td class="text-right">
-                </td>
-              </tr>
-              {% else %}
-              <tr>
-                <td style="display:none">{{ event.id }}</td>
-                <td class="align-middle">{{ event.name }}</td>
-                <td class="align-middle">{{ event.date }}</td>
-                <td class="align-middle">{{ event.location }}</td>
-                <td class="text-right">
-                  {% for tag in event.tag.all %}
-                    {{ tag.get_html_badge }}
-                  {% endfor %}
-                </td>
-                <td class="text-right">
-                  <a href="{% url 'organizers:event_change' event.pk %}" style="color:#17a2b8;"><i class="fa fa-edit"></i></a>
-                </td>
-              </tr>
+    <div class="table-responsive">
+      <table class="table mb-0 table-striped">
+        <thead>
+          <tr>
+            <th class="align-middle">Event</th>
+            <th class="align-middle">Date</th>
+            <th class="align-middle">Location</th>
+            <th class="text-right">Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in events %}
+            {% if event.owner.id == user.id %}
+              {% if event.date|less_than_two_days_old %}
+                {% if event.date|past %}
+                <tr data-toggle="popover" data-trigger="hover" title="Event Details">
+                  <td style="display:none">{{ event.id }}</td>
+                  <td class="align-middle">{{ event.name }}</td>
+                  <td class="align-middle">{{ event.date|naturaltime }}</td>
+                  <td class="align-middle">{{ event.location }}</td>
+                  <td class="text-right">
+                    {% for tag in event.tag.all %}
+                      {{ tag.get_html_badge }}
+                    {% endfor %}
+                  </td>
+                  <td class="text-right">
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td style="display:none">{{ event.id }}</td>
+                  <td class="align-middle">{{ event.name }}</td>
+                  <td class="align-middle">{{ event.date }}</td>
+                  <td class="align-middle">{{ event.location }}</td>
+                  <td class="text-right">
+                    {% for tag in event.tag.all %}
+                      {{ tag.get_html_badge }}
+                    {% endfor %}
+                  </td>
+                  <td class="text-right">
+                    <a href="{% url 'organizers:event_change' event.pk %}" style="color:#17a2b8;"><i class="fa fa-edit"></i></a>
+                  </td>
+                </tr>
+                {% endif %}
               {% endif %}
             {% endif %}
-          {% endif %}
-        {% empty %}
-          <tr>
-            <td class="bg-light text-center font-italic" colspan="5">No events created in the past two days.</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+          {% empty %}
+            <tr>
+              <td class="bg-light text-center font-italic" colspan="5">No events created in the past two days.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}

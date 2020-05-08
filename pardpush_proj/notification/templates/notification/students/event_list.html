@@ -5,35 +5,37 @@
 {% block content %}
 {% include 'notification/students/_header.html' with active='new' %}
   <div class="card">
-    <table class="table table-striped mb-0">
-      <thead>
-        <tr>
-          <th class="align-middle">Event</th>
-          <th class="align-middle">Date</th>
-          <th class="align-middle">Location</th>
-          <th class="align-middle">Tags</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for event in events %}
-          {% if event.date|future %}
-            <tr>
-              <td class="align-middle">{{ event.name }}</td>
-              <td class="align-middle">{{ event.date }}</td>
-              <td class="align-middle">{{ event.location }}</td>
-              <td class="align-middle">
-                {% for tag in event.tag.all %}
-                    {{ tag.get_html_badge }}
-                  {% endfor %}
-              </td>
-            </tr>
-          {% endif %}
-        {% empty %}
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead>
           <tr>
-            <td class="bg-light text-center font-italic" colspan="4">No upcoming event right now.</td>
+            <th class="align-middle">Event</th>
+            <th class="align-middle">Date</th>
+            <th class="align-middle">Location</th>
+            <th class="align-middle">Tags</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for event in events %}
+            {% if event.date|future %}
+              <tr>
+                <td class="align-middle">{{ event.name }}</td>
+                <td class="align-middle">{{ event.date }}</td>
+                <td class="align-middle">{{ event.location }}</td>
+                <td class="align-middle">
+                  {% for tag in event.tag.all %}
+                      {{ tag.get_html_badge }}
+                    {% endfor %}
+                </td>
+              </tr>
+            {% endif %}
+          {% empty %}
+            <tr>
+              <td class="bg-light text-center font-italic" colspan="4">No upcoming event right now.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
