@@ -261,28 +261,28 @@ class TagSelectForm(forms.ModelForm):
             delta = queryset.cleaned_data['delta']
             timeunit = queryset.cleaned_data['timeunit']
             if timeunit == 'minutes':
-                if(timeshift == "Before"):
-                    scheduled_time = date - timedelta(minutes=delta)
+                if(timeshift == "before"):
+                    scheduled_time = date - timedelta(minutes=int(delta))
                 else:
-                    scheduled_time = date + timedelta(minutes=delta)
+                    scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             elif timeunit == 'hours':
-                if(timeshift == "Before"):
-                    scheduled_time = date - timedelta(hours=delta)
+                if(timeshift == "before"):
+                    scheduled_time = date - timedelta(hours=int(delta))
                 else:
-                    scheduled_time = date + timedelta(hours=delta)
+                    scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
-                if(timeshift == "Before"):
-                    scheduled_time = date - timedelta(days=delta)
+                if(timeshift == "before"):
+                    scheduled_time = date - timedelta(days=int(delta))
                 else:
-                    scheduled_time = date + timedelta(days=delta)
+                    scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
