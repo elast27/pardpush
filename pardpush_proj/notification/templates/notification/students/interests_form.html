@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h2 class="mb-3">Update your interests</h2>
+  <h2 class="mb-3">Student Settings</h2>
   <form method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
