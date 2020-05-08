@@ -257,7 +257,7 @@ class TagSelectForm(forms.ModelForm):
         cost = len(lst) * .00562
         if cost <= request.user.budget:
             date = queryset.cleaned_data['date']
-            timeshift = queryset.cleaned_data['timeshift']
+            timeshift = queryset.cleaned_data['shift']
             delta = queryset.cleaned_data['delta']
             timeunit = queryset.cleaned_data['timeunit']
             if timeunit == 'minutes':
