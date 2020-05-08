@@ -119,8 +119,8 @@ class TagSelectForm(forms.ModelForm):
         )
     )
     delta = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'0','min':'0','max': '60','type': 'number'}))
-    timeunit = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','minutes'),('2','hours'),('3','days')))))
-    shift = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','before'),('2','after'))))
+    timeunit = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','minutes'),('2','hours'),('3','days'))))
+    shift = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','before'),('2','after'))))
     class Meta:
         model = Event
         fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
