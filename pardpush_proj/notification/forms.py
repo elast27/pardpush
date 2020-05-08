@@ -267,7 +267,8 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                #scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
                 return (True,cost)
             elif timeunit == 2:
                 if(timeshift == 1):
@@ -276,7 +277,8 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                #scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
                 return (True,cost)
             else:
                 if(timeshift == 1):
@@ -285,7 +287,8 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                #scheduler.enqueue_at(datetime(datetime.year.__get__(scheduled_time,datetime),datetime.month.__get__(scheduled_time,datetime),datetime.day.__get__(scheduled_time,datetime),datetime.hour.__get__(scheduled_time,datetime),datetime.minute.__get__(scheduled_time,datetime)),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
                 return (True,cost)
         else:
             return (False,cost)
@@ -306,3 +309,9 @@ def send_scheduled_blast(frm, request, queryset):
         body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has not been sent. This is most likely due to insufficient funds in your account.  Please contact the PardPush program chair for more information.\n\n -PardPush'
         msg = (subject,body,'PardPush <pardpushhost@gmail.com>',recipient)
         send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
+        
+def test_func(str):
+    account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
+    auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(from_='+16108105091',body='Did this work?',to='+19143551565')
