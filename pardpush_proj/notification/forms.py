@@ -267,7 +267,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(scheduled_time.year,datetime.month,datetime.day,datetime.hour,datetime.minute),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             elif timeunit == 2:
                 if(timeshift == 1):
@@ -276,7 +276,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(scheduled_time.year,datetime.month,datetime.day,datetime.hour,datetime.minute),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
                 if(timeshift == 1):
@@ -285,16 +285,16 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(scheduled_time.year,datetime.month,datetime.day,datetime.hour,datetime.minute),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
         else:
             return (False,cost)
     
     
 
-def send_scheduled_blast(self, request, queryset):
-    zucc = send_sms(self,request,queryset)
-    send_notification(self,request,queryset)
+def send_scheduled_blast(frm, request, queryset):
+    zucc = send_sms(frm,request,queryset)
+    send_notification(frm,request,queryset)
     
     #send email to organizer and tell them result of blast
     if zucc[0]: #budget was good!
