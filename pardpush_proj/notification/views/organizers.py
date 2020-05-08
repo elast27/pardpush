@@ -59,14 +59,14 @@ class EventCreateView(CreateView):
         event.save()
         for obj in some_var:
             event.tag.add(obj)
-        if not self.request.POST.get('delta') == 0:
-            zucc = form.schedule(self.request, form)
-            if not zucc[0]:
-                event.delete()
-                messages.error(self.request, 'You do not have enough funds to complete this request. Cost: $' + zucc[1].__str__() + '.  Please contact PardPush admin to add more funds.')
-            else:
-                messages.success(self.request, 'Event blast scheduled successfully!')
-            return redirect('home')
+        #if not self.request.POST.get('delta') == 0:
+            #zucc = form.schedule(self.request, form)
+            #if not zucc[0]:
+                #event.delete()
+                #messages.error(self.request, 'You do not have enough funds to complete this request. Cost: $' + zucc[1].__str__() + '.  Please contact PardPush admin to add more funds.')
+            #else:
+                #messages.success(self.request, 'Event blast scheduled successfully!')
+            #return redirect('home')
         succ = form.send_SMS(self.request, form) #Send SMS notification
         if succ[0]:
             form.send_notification(self.request, form) # Send email notification
