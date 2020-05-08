@@ -233,7 +233,7 @@ class TagSelectForm(forms.ModelForm):
         else:
             return (False,cost)
         
-     def schedule(self, request, queryset):
+    def schedule(self, request, queryset):
         rc = get_redis_connection('default')
         scheduler = Scheduler(connection=rc)
         def createQuery(lst):
