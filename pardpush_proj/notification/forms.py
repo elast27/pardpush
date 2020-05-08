@@ -199,15 +199,6 @@ class TagSelectForm(forms.ModelForm):
                 except TwilioRestException:
                     #stu = Student.objects.filter(phone=i[0]).update(sms_unsub=True) #enable this in the future when implementation for "Start" sms response is done
                     print(i.__str__() + " unsubscribed; no message sent")
-        def getBudget(request):
-            conn = psycopg2.connect('dbname=pardpush user=pardpushs')
-            cur = conn.cursor()
-            id = request.user.id
-            cur.execute('SELECT budget FROM notification_user WHERE id='+id.__str__()+';')
-            tmp = cur.fetchone()
-            cur.close()
-            conn.close()
-            return tmp
         def setBudget(request,val):
             conn = psycopg2.connect('dbname=pardpush user=pardpushs')
             cur = conn.cursor()
@@ -221,10 +212,9 @@ class TagSelectForm(forms.ModelForm):
         query = createQuery(tags)
         lst = sendQuery(query)
         cost = len(lst) * .00562
-        #budget = getBudget(request)
         if cost <= request.user.budget:
             sendLoop(lst,msg)
-            setBudget(request,budget[0]-cost)
+            setBudget(request,request.user.budget-cost)
             return (True,cost)
         else:
             return (False,cost)
