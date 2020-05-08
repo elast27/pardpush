@@ -97,6 +97,11 @@ class StudentInterestsForm(forms.ModelForm):
             'email_unsub': forms.CheckboxInput,
             'sms_unsub': forms.CheckboxInput
         }
+        labels = {
+            'interests': 'Select Interests:',
+            'email_unsub': 'Opt-out of emails.',
+            'sms_unsub': 'Opt-out of text messages.',
+        }
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(
