@@ -94,7 +94,6 @@ class StudentInterestsForm(forms.ModelForm):
         model = Student
         fields = ('phone', 'interests', 'email_unsub', 'sms_unsub',)
         widgets = {
-            'phone': forms.CharField,
             'interests': forms.CheckboxSelectMultiple,
             'email_unsub': forms.CheckboxInput,
             'sms_unsub': forms.CheckboxInput,
