@@ -267,7 +267,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduled_time.replace(tzinfo=timezone.utc)
+                scheduled_time.replace(tzinfo=timezone.utc).isoformat()
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             elif timeunit == 2:
@@ -277,7 +277,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduled_time.replace(tzinfo=timezone.utc)
+                scheduled_time.replace(tzinfo=timezone.utc).isoformat()
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
@@ -287,7 +287,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduled_time.replace(tzinfo=timezone.utc)
+                scheduled_time.replace(tzinfo=timezone.utc).isoformat()
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
         else:
