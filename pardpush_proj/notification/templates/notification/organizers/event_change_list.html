@@ -44,7 +44,7 @@
                   <td class="align-middle">{{ event.name }}</td>
                   <td class="align-middle">{{ event.date|naturaltime }}</td>
                   <td class="align-middle">{{ event.location }}</td>
-                  <td class="text-right">
+                  <td class="align-middle text-right">
                     {% for tag in event.tag.all %}
                       {{ tag.get_html_badge }}
                     {% endfor %}
@@ -58,7 +58,7 @@
                   <td class="align-middle">{{ event.name }}</td>
                   <td class="align-middle">{{ event.date }}</td>
                   <td class="align-middle">{{ event.location }}</td>
-                  <td class="text-right">
+                  <td class="align-middle text-right">
                     {% for tag in event.tag.all %}
                       {{ tag.get_html_badge }}
                     {% endfor %}
