@@ -15,9 +15,6 @@ from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
 from datetime import datetime,timedelta,timezone
 
-rc = get_redis_connection('default')
-scheduler = Scheduler(connection=rc) #for scheduled blasts
-
 class OrganizerSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
@@ -233,6 +230,8 @@ class TagSelectForm(forms.ModelForm):
             return (False,cost)
 
     def schedule(self, request, queryset):
+        rc = get_redis_connection('default')
+        scheduler = Scheduler(connection=rc)
         def createQuery(lst):
             query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
@@ -244,7 +243,7 @@ class TagSelectForm(forms.ModelForm):
                 query += ") AND (sms_unsub=FALSE) GROUP BY phone"
             return query
         def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
+            conn = psycopg2.connect("dbname=pardpush user=matthewstern")
             cur = conn.cursor()
             cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
             conn.commit()
@@ -257,35 +256,35 @@ class TagSelectForm(forms.ModelForm):
         cost = len(lst) * .00562
         if cost <= request.user.budget:
             date = queryset.cleaned_data['date']
-            timeshift = queryset.cleaned_data['shift']
-            delta = queryset.cleaned_data['delta']
-            timeunit = queryset.cleaned_data['timeunit']
-            if timeunit == 'minutes':
-                if(timeshift == "Before"):
+            timeshift = int(queryset.cleaned_data['shift'])
+            delta = int(queryset.cleaned_data['delta'])
+            timeunit = int(queryset.cleaned_data['timeunit'])
+            if timeunit == 1:
+                if(timeshift == 1):
                     scheduled_time = date - timedelta(minutes=delta)
                 else:
                     scheduled_time = date + timedelta(minutes=delta)
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                if scheduled_time.replace(tzinfo=None) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,kwargs={'request':'request','queryset':'queryset'})
                 return (True,cost)
-            elif timeunit == 'hours':
-                if(timeshift == "Before"):
+            elif timeunit == 2:
+                if(timeshift == 3):
                     scheduled_time = date - timedelta(hours=delta)
                 else:
                     scheduled_time = date + timedelta(hours=delta)
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                if (scheduled_time.replace(tzinfo=None)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,kwargs={'request':'request','queryset':'queryset'})
                 return (True,cost)
             else:
-                if(timeshift == "Before"):
+                if(timeshift == 1):
                     scheduled_time = date - timedelta(days=delta)
                 else:
                     scheduled_time = date + timedelta(days=delta)
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                if (scheduled_time.replace(tzinfo=None)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,kwargs={'request':'request','queryset':'queryset'})
                 return (True,cost)
         else:
             return (False,cost)
@@ -293,11 +292,11 @@ class TagSelectForm(forms.ModelForm):
     
 
 def send_scheduled_blast(self, request, queryset):
-    zucc = send_sms(self,request,queryset)
-    send_notification(self,request,queryset)
+    zucc = send_sms(request,queryset)
     
     #send email to organizer and tell them result of blast
     if zucc[0]: #budget was good!
+        send_notification(request,queryset)
         subject = 'Scheduled Blast: ' + queryset.cleaned_data['name']
         body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has been sent. \n\n -PardPush'
         send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
