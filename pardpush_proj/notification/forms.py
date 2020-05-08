@@ -140,7 +140,7 @@ class TagSelectForm(forms.ModelForm):
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += ") AND (email_unsub='f') GROUP BY email"
+                query += ") AND (email_unsub='f') GROUP BY email;"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=pardpushs")
@@ -170,7 +170,7 @@ class TagSelectForm(forms.ModelForm):
                 for i in range(0, len(lst)-1):
                     query += '\'' + lst[i].__str__()+'\' OR tagname='
                 query += '\'' + lst[-1].__str__() + '\''
-                query += ") AND (sms_unsub='f') GROUP BY phone"
+                query += ") AND (sms_unsub='f') GROUP BY phone;"
             return query
         def sendQuery(query):
             conn = psycopg2.connect("dbname=pardpush user=pardpushs")
@@ -233,90 +233,90 @@ class TagSelectForm(forms.ModelForm):
         else:
             return (False,cost)
 
-    def schedule(self, request, queryset):
+#     def schedule(self, request, queryset):
         
-        rc = get_redis_connection('default')
-        scheduler = Scheduler(connection=rc) #for scheduled blasts
+#         rc = get_redis_connection('default')
+#         scheduler = Scheduler(connection=rc) #for scheduled blasts
         
-        def createQuery(lst):
-            query = 'SELECT phone FROM usabletable WHERE (tagname='
-            if len(lst)==1:
-                query += '\'' + lst[0].__str__() + '\')'
-            else:
-                for i in range(0, len(lst)-1):
-                    query += '\'' + lst[i].__str__()+'\' OR tagname='
-                query += '\'' + lst[-1].__str__() + '\''
-                query += ") AND (sms_unsub=FALSE) GROUP BY phone"
-            return query
-        def sendQuery(query):
-            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
-            cur = conn.cursor()
-            cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
-            conn.commit()
-            cur.execute(query)
-            lst = cur.fetchall()
-            cur.close()
-            conn.close()
-            return lst
-        lst = sendQuery(createQuery(list(queryset.cleaned_data['tag'])))
-        cost = len(lst) * .00562
-        if cost <= request.user.budget:
-            date = queryset.cleaned_data['date']
-            timeshift = queryset.cleaned_data['shift']
-            delta = queryset.cleaned_data['delta']
-            timeunit = queryset.cleaned_data['timeunit']
-            if timeunit == 1:
-                if(timeshift == 1):
-                    scheduled_time = date - timedelta(minutes=int(delta))
-                else:
-                    scheduled_time = date + timedelta(minutes=int(delta))
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
-                    return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
-                #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
-                return (True,cost)
-            elif timeunit == 2:
-                if(timeshift == 1):
-                    scheduled_time = date - timedelta(hours=int(delta))
-                else:
-                    scheduled_time = date + timedelta(hours=int(delta))
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
-                    return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
-                #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
-                return (True,cost)
-            else:
-                if(timeshift == 1):
-                    scheduled_time = date - timedelta(days=int(delta))
-                else:
-                    scheduled_time = date + timedelta(days=int(delta))
-                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
-                    return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
-                #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
-                return (True,cost)
-        else:
-            return (False,cost)
+#         def createQuery(lst):
+#             query = 'SELECT phone FROM usabletable WHERE (tagname='
+#             if len(lst)==1:
+#                 query += '\'' + lst[0].__str__() + '\')'
+#             else:
+#                 for i in range(0, len(lst)-1):
+#                     query += '\'' + lst[i].__str__()+'\' OR tagname='
+#                 query += '\'' + lst[-1].__str__() + '\''
+#                 query += ") AND (sms_unsub=FALSE) GROUP BY phone"
+#             return query
+#         def sendQuery(query):
+#             conn = psycopg2.connect("dbname=pardpush user=pardpushs")
+#             cur = conn.cursor()
+#             cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
+#             conn.commit()
+#             cur.execute(query)
+#             lst = cur.fetchall()
+#             cur.close()
+#             conn.close()
+#             return lst
+#         lst = sendQuery(createQuery(list(queryset.cleaned_data['tag'])))
+#         cost = len(lst) * .00562
+#         if cost <= request.user.budget:
+#             date = queryset.cleaned_data['date']
+#             timeshift = queryset.cleaned_data['shift']
+#             delta = queryset.cleaned_data['delta']
+#             timeunit = queryset.cleaned_data['timeunit']
+#             if timeunit == 1:
+#                 if(timeshift == 1):
+#                     scheduled_time = date - timedelta(minutes=int(delta))
+#                 else:
+#                     scheduled_time = date + timedelta(minutes=int(delta))
+#                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+#                     return (False,cost)
+#                 scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
+#                 #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
+#                 return (True,cost)
+#             elif timeunit == 2:
+#                 if(timeshift == 1):
+#                     scheduled_time = date - timedelta(hours=int(delta))
+#                 else:
+#                     scheduled_time = date + timedelta(hours=int(delta))
+#                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+#                     return (False,cost)
+#                 scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
+#                 #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
+#                 return (True,cost)
+#             else:
+#                 if(timeshift == 1):
+#                     scheduled_time = date - timedelta(days=int(delta))
+#                 else:
+#                     scheduled_time = date + timedelta(days=int(delta))
+#                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+#                     return (False,cost)
+#                 scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,request,queryset)
+#                 #scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),test_func,'param')
+#                 return (True,cost)
+#         else:
+#             return (False,cost)
     
     
 
-def send_scheduled_blast(self, request, queryset):
-    zucc = TagSelectForm.send_sms(request,queryset)
-    TagSelectForm.send_notification(request,queryset)
+# def send_scheduled_blast(self, request, queryset):
+#     zucc = TagSelectForm.send_sms(request,queryset)
+#     TagSelectForm.send_notification(request,queryset)
     
-    #send email to organizer and tell them result of blast
-    if zucc[0]: #budget was good!
-        subject = 'Scheduled Blast: ' + queryset.cleaned_data['name']
-        body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has been sent. \n\n -PardPush'
-        send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
-    else:
-        subject = 'Failed Scheduled Blast: ' + queryset.cleaned_data['name']
-        body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has not been sent. This is most likely due to insufficient funds in your account.  Please contact the PardPush program chair for more information.\n\n -PardPush'
-        msg = (subject,body,'PardPush <pardpushhost@gmail.com>',recipient)
-        send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
+#     #send email to organizer and tell them result of blast
+#     if zucc[0]: #budget was good!
+#         subject = 'Scheduled Blast: ' + queryset.cleaned_data['name']
+#         body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has been sent. \n\n -PardPush'
+#         send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
+#     else:
+#         subject = 'Failed Scheduled Blast: ' + queryset.cleaned_data['name']
+#         body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has not been sent. This is most likely due to insufficient funds in your account.  Please contact the PardPush program chair for more information.\n\n -PardPush'
+#         msg = (subject,body,'PardPush <pardpushhost@gmail.com>',recipient)
+#         send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
         
-def test_func(str):
-    account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
-    auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
-    client = Client(account_sid, auth_token)
-    message = client.messages.create(from_='+16108105091',body='Did this work?',to='+19143551565')
+# def test_func(str):
+#     account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
+#     auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+#     client = Client(account_sid, auth_token)
+#     message = client.messages.create(from_='+16108105091',body='Did this work?',to='+19143551565')
