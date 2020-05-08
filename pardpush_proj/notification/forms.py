@@ -267,7 +267,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(int(scheduled_time.year),int(datetime.month),int(datetime.day),int(datetime.hour),int(datetime.minute)),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             elif timeunit == 2:
                 if(timeshift == 1):
@@ -276,7 +276,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(int(scheduled_time.year),int(datetime.month),int(datetime.day),int(datetime.hour),int(datetime.minute)),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
                 if(timeshift == 1):
@@ -285,7 +285,7 @@ class TagSelectForm(forms.ModelForm):
                     scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
-                scheduler.enqueue_at(scheduled_time.replace(tzinfo=None),send_scheduled_blast,self,request,queryset)
+                scheduler.enqueue_at(datetime(int(scheduled_time.year),int(datetime.month),int(datetime.day),int(datetime.hour),int(datetime.minute)),send_scheduled_blast,self,request,queryset)
                 return (True,cost)
         else:
             return (False,cost)
