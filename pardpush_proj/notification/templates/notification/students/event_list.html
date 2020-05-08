@@ -5,12 +5,13 @@
 {% block content %}
 {% include 'notification/students/_header.html' with active='new' %}
   <div class="card">
-    <table class="table mb-0">
+    <table class="table table-striped mb-0">
       <thead>
         <tr>
-          <th>Event</th>
-          <th>Date</th>
-          <th>Location</th>
+          <th class="align-middle">Event</th>
+          <th class="align-middle">Date</th>
+          <th class="align-middle">Location</th>
+          <th class="align-middle">Tags</th>
         </tr>
       </thead>
       <tbody>
@@ -20,7 +21,11 @@
               <td class="align-middle">{{ event.name }}</td>
               <td class="align-middle">{{ event.date }}</td>
               <td class="align-middle">{{ event.location }}</td>
-              <td class="align-middle">{{ event.tag.get_html_badge }}</td>
+              <td class="align-middle">
+                {% for tag in event.tag.all %}
+                    {{ tag.get_html_badge }}
+                  {% endfor %}
+              </td>
             </tr>
           {% endif %}
         {% empty %}

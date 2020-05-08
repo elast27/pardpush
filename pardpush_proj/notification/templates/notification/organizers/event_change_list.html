@@ -35,7 +35,7 @@
       </thead>
       <tbody>
         {% for event in events %}
-          {% if event.owner_id == user.id %}
+          {% if event.owner.id == user.id %}
             {% if event.date|less_than_two_days_old %}
               {% if event.date|past %}
               <tr data-toggle="popover" data-trigger="hover" title="Event Details">
