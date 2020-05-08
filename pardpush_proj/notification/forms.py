@@ -13,7 +13,7 @@ from django.core.mail import send_mass_mail
 
 from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
-from datetime import datetime
+from datetime import datetime,timedelta,timezone
 
 rc = get_redis_connection('default')
 scheduler = Scheduler(connection=rc) #for scheduled blasts
@@ -257,7 +257,7 @@ class TagSelectForm(forms.ModelForm):
         cost = len(lst) * .00562
         if cost <= request.user.budget:
             date = queryset.cleaned_data['date']
-            timeshift = queryset.cleaned_data['timeshift']
+            timeshift = queryset.cleaned_data['shift']
             delta = queryset.cleaned_data['delta']
             timeunit = queryset.cleaned_data['timeunit']
             if timeunit == 'minutes':
