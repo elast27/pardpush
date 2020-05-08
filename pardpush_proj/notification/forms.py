@@ -13,7 +13,7 @@ from django.core.mail import send_mass_mail,send_mail
 
 from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta,timezone
 
 rc = get_redis_connection('default')
 scheduler = Scheduler(connection=rc) #for scheduled blasts
@@ -260,31 +260,34 @@ class TagSelectForm(forms.ModelForm):
             timeshift = queryset.cleaned_data['shift']
             delta = queryset.cleaned_data['delta']
             timeunit = queryset.cleaned_data['timeunit']
-            if timeunit == 'minutes':
-                if(timeshift == "before"):
+            if timeunit == 1:
+                if(timeshift == 1):
                     scheduled_time = date - timedelta(minutes=int(delta))
                 else:
                     scheduled_time = date + timedelta(minutes=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
+                scheduled_time.replace(tzinfo=timezone.utc)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
-            elif timeunit == 'hours':
-                if(timeshift == "before"):
+            elif timeunit == 2:
+                if(timeshift == 1):
                     scheduled_time = date - timedelta(hours=int(delta))
                 else:
                     scheduled_time = date + timedelta(hours=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
+                scheduled_time.replace(tzinfo=timezone.utc)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
             else:
-                if(timeshift == "before"):
+                if(timeshift == 1):
                     scheduled_time = date - timedelta(days=int(delta))
                 else:
                     scheduled_time = date + timedelta(days=int(delta))
                 if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
                     return (False,cost)
+                scheduled_time.replace(tzinfo=timezone.utc)
                 scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
                 return (True,cost)
         else:
