@@ -11,6 +11,12 @@ from tempus_dominus.widgets import DateTimePicker
 from notification.models import (Student, Tag, User, Event)
 from django.core.mail import send_mass_mail
 
+from redis import Redis
+from rq_scheduler import Scheduler
+from datetime import datetime
+
+scheduler = Scheduler(connection=Redis()) #for scheduled blasts
+
 class OrganizerSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
@@ -112,9 +118,12 @@ class TagSelectForm(forms.ModelForm):
             }
         )
     )
+    delta = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'0','min':'0','max': '60','type': 'number'}))
+    timeunit = forms.ChoiceField(widget=forms.widgets.ChoiceWidget(attrs={'class':'form-control'},choices=('minutes','hours','days')),initial='hours')
+    shift = forms.ChoiceField(widget=forms.widgets.ChoiceWidget(attrs={'class':'form-control'},choices=('before','after')),initial='before')
     class Meta:
         model = Event
-        fields = ('name', 'tag', 'date', 'location', 'message', )
+        fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
         }
@@ -214,10 +223,85 @@ class TagSelectForm(forms.ModelForm):
         query = createQuery(tags)
         lst = sendQuery(query)
         cost = len(lst) * .00562
-        budget = getBudget(request)
-        if cost <= budget[0]:
+        #budget = getBudget(request)
+        if cost <= request.user.budget:
             sendLoop(lst,msg)
             setBudget(request,budget[0]-cost)
             return (True,cost)
         else:
             return (False,cost)
+
+    def schedule(self, request, queryset):
+        def createQuery(lst):
+            query = 'SELECT phone FROM usabletable WHERE (tagname='
+            if len(lst)==1:
+                query += '\'' + lst[0].__str__() + '\')'
+            else:
+                for i in range(0, len(lst)-1):
+                    query += '\'' + lst[i].__str__()+'\' OR tagname='
+                query += '\'' + lst[-1].__str__() + '\''
+                query += ") AND (sms_unsub=FALSE) GROUP BY phone"
+            return query
+        def sendQuery(query):
+            conn = psycopg2.connect("dbname=pardpush user=pardpushs")
+            cur = conn.cursor()
+            cur.execute("REFRESH MATERIALIZED VIEW usabletable;")
+            conn.commit()
+            cur.execute(query)
+            lst = cur.fetchall()
+            cur.close()
+            conn.close()
+            return lst
+        lst = sendQuery(createQuery(list(queryset.cleaned_data['tag'])))
+        cost = len(lst) * .00562
+        if cost <= request.user.budget:
+            date = queryset.cleaned_data['date']
+            shift = queryset.cleaned_data['shift']
+            delta = queryset.cleaned_data['delta']
+            timeunit = queryset.cleaned_data['timeunit']
+            if timeunit == 'minutes':
+                if(shift == "Before"):
+                    scheduled_time = date - timedelta(minutes=delta)
+                else:
+                    scheduled_time = date + timedelta(minutes=delta)
+                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                    return (False,cost)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                return (True,cost)
+            elif timeunit == 'hours':
+                if(shift == "Before"):
+                    scheduled_time = date - timedelta(hours=delta)
+                else:
+                    scheduled_time = date + timedelta(hours=delta)
+                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                    return (False,cost)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                return (True,cost)
+            else:
+                if(shift == "Before"):
+                    scheduled_time = date - timedelta(days=delta)
+                else:
+                    scheduled_time = date + timedelta(days=delta)
+                if (scheduled_time.replace(tzinfo=None) - timedelta(hours=4)) < datetime.now():
+                    return (False,cost)
+                scheduler.enqueue_at(scheduled_time,send_scheduled_blast,self,request,queryset)
+                return (True,cost)
+        else:
+            return (False,cost)
+    
+    
+
+def send_scheduled_blast(self, request, queryset):
+    zucc = send_sms(self,request,queryset)
+    send_notification(self,request,queryset)
+    
+    #send email to organizer and tell them result of blast
+    if zucc[0]: #budget was good!
+        subject = 'Scheduled Blast: ' + queryset.cleaned_data['name']
+        body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has been sent. \n\n -PardPush'
+        send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
+    else:
+        subject = 'Failed Scheduled Blast: ' + queryset.cleaned_data['name']
+        body = 'Hi, ' + request.user.first_name + '!\n\n' 'Your scheduled blast for ' + queryset.cleaned_data['name'] + ' has not been sent. This is most likely due to insufficient funds in your account.  Please contact the PardPush program chair for more information.\n\n -PardPush'
+        msg = (subject,body,'PardPush <pardpushhost@gmail.com>',recipient)
+        send_mail(subject,body,'PardPush <pardpushhost@gmail.com>',request.user.email,fail_silently=True)
