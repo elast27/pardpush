@@ -9,11 +9,11 @@ from django.forms.utils import ValidationError
 from tempus_dominus.widgets import DateTimePicker
 
 from notification.models import (Student, Tag, User, Event)
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mass_mail,send_mail
 
 from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
-from datetime import datetime
+from datetime import datetime,timedelta
 
 rc = get_redis_connection('default')
 scheduler = Scheduler(connection=rc) #for scheduled blasts
