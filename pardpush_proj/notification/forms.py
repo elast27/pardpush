@@ -119,13 +119,13 @@ class TagSelectForm(forms.ModelForm):
             }
         )
     )
-    #delta = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'0','min':'0','max': '60','type': 'number'}))
-    #timeunit = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','minutes'),('2','hours'),('3','days'))))
-    #shift = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','before'),('2','after'))))
+    delta = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'0','min':'0','max': '60','type': 'number'}))
+    timeunit = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','minutes'),('2','hours'),('3','days'))))
+    shift = forms.CharField(widget=forms.Select(attrs={'class':'form-control'},choices=(('1','before'),('2','after'))))
     class Meta:
         model = Event
-        #fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
-        fields = ('name', 'tag', 'date', 'location', 'message', )
+        fields = ('name', 'tag', 'date', 'delta', 'timeunit', 'shift', 'location', 'message', )
+        #fields = ('name', 'tag', 'date', 'location', 'message', )
         widgets = {
             'tag': forms.CheckboxSelectMultiple,
         }
