@@ -11,11 +11,12 @@ from tempus_dominus.widgets import DateTimePicker
 from notification.models import (Student, Tag, User, Event)
 from django.core.mail import send_mass_mail
 
-from redis import Redis
+from django_redis import get_redis_connection
 from rq_scheduler import Scheduler
 from datetime import datetime
 
-scheduler = Scheduler(connection=Redis()) #for scheduled blasts
+rc = get_redis_connection('default')
+scheduler = Scheduler(connection=rc) #for scheduled blasts
 
 class OrganizerSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
