@@ -130,7 +130,7 @@ class TagSelectForm(forms.ModelForm):
         }
         
     # Method for sending email notifications to users
-    def send_notification(request, queryset):
+    def send_notification(self, request, queryset):
         def createQuery(lst):
             query = 'SELECT email FROM usabletable WHERE (tagname='
             if len(lst)==1:
@@ -160,7 +160,7 @@ class TagSelectForm(forms.ModelForm):
         msgs = [(subject,body,'PardPush <pardpushhost@gmail.com>',recipient) for recipient in lst] #hides recipient list from each recipient
         send_mass_mail(msgs,fail_silently=True)
 
-    def send_SMS(request, queryset):
+    def send_SMS(self, request, queryset):
         def createQuery(lst):
             query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
@@ -232,7 +232,7 @@ class TagSelectForm(forms.ModelForm):
         else:
             return (False,cost)
 
-    def schedule(request, queryset):
+    def schedule(self, request, queryset):
         def createQuery(lst):
             query = 'SELECT phone FROM usabletable WHERE (tagname='
             if len(lst)==1:
@@ -295,7 +295,7 @@ class TagSelectForm(forms.ModelForm):
     
     
 
-def send_scheduled_blast(request, queryset):
+def send_scheduled_blast(self, request, queryset):
     zucc = TagSelectForm.send_sms(request,queryset)
     TagSelectForm.send_notification(request,queryset)
     
