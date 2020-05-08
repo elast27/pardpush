@@ -91,9 +91,11 @@ class StudentSignUpForm(forms.ModelForm):
 class StudentInterestsForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ('interests', )
+        fields = ('interests', 'email_unsub', 'sms_unsub',)
         widgets = {
-            'interests': forms.CheckboxSelectMultiple
+            'interests': forms.CheckboxSelectMultiple,
+            'email_unsub': forms.CheckboxInput,
+            'sms_unsub': forms.CheckboxInput
         }
 
 class DateForm(forms.Form):
