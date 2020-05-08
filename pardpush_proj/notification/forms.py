@@ -92,6 +92,7 @@ class StudentSignUpForm(forms.ModelForm):
 class StudentInterestsForm(forms.ModelForm):
     class Meta:
         model = Student
+        phone = forms.CharField(required=True)
         fields = ('phone', 'interests', 'email_unsub', 'sms_unsub',)
         widgets = {
             'interests': forms.CheckboxSelectMultiple,
