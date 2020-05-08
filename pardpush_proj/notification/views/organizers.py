@@ -48,7 +48,6 @@ class EventListView(ListView):
 class EventCreateView(CreateView):
     form_class = TagSelectForm
     model = Event
-    #fields = ('name', 'tag', 'date', 'location', 'message', )
     template_name = 'notification/organizers/event_add_form.html'
 
     def form_valid(self, form):
