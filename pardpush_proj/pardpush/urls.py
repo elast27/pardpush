@@ -12,4 +12,5 @@ urlpatterns = [
     path('accounts/signup/organizer/', organizers.OrganizerSignUpView.as_view(), name='organizer_signup'),
     path('accounts/caslogin', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
     path('accounts/caslogout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
+    path('django-rq/', include('django_rq.urls')),
 ]
