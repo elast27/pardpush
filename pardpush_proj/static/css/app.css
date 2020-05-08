@@ -65,3 +65,13 @@ footer a {
 .has-danger .invalid-feedback {
   display: block;
 }
+
+/* custom css */
+.logo img {
+  width: 3.9em;
+  margin-top: -.5em;
+}
+
+.alert-budget {
+  width: -webkit-fill-available
+}
