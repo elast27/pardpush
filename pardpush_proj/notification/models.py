@@ -22,7 +22,7 @@ class Tag(models.Model):
     def get_html_badge(self):
         name = escape(self.tagname)
         color = escape(self.color)
-        html = '<span class="badge badge-primary" style="background-color: %s">%s</span>' % (color, name)
+        html = '<span class="badge badge-pill badge-primary" style="background-color: %s">%s</span>' % (color, name)
         return mark_safe(html)
 
 class Event(models.Model):
@@ -74,3 +74,11 @@ class StudentsPerTag(models.Model):
     class Meta:
         managed = False
         db_table = 'studentspertag'
+
+class EventTags(models.Model):
+    event_id = models.IntegerField()
+    tagname = models.TextField()
+    
+    class Meta:
+        managed = False
+        db_table = 'eventtags'

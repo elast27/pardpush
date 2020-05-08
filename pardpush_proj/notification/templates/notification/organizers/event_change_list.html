@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load custom_filters %}
+{% load humanize %}
 
 {% block content %}
 <div class="row">
@@ -23,13 +24,13 @@
   </div>
 </div>
   <div class="card">
-    <table class="table mb-0">
+    <table class="table mb-0 table-striped">
       <thead>
         <tr>
-          <th>Event</th>
-          <th>Date</th>
-          <th>Location</th>
-          <th></th>
+          <th class="align-middle">Event</th>
+          <th class="align-middle">Date</th>
+          <th class="align-middle">Location</th>
+          <th class="text-right">Tags</th>
         </tr>
       </thead>
       <tbody>
@@ -37,21 +38,31 @@
           {% if event.date|less_than_two_days_old %}
             {% if event.date|past %}
             <tr>
+              <td style="display:none">{{ event.id }}</td>
               <td class="align-middle">{{ event.name }}</td>
-              <td class="align-middle">{{ event.date }}</td>
+              <td class="align-middle">{{ event.date|naturaltime }}</td>
               <td class="align-middle">{{ event.location }}</td>
-              <td class="align-middle">{{ event.tag.get_html_badge }}</td>
+              <td class="text-right">
+                {% for tag in event.tag.all %}
+                  {{ tag.get_html_badge }}
+                {% endfor %}
+              </td>
               <td class="text-right">
               </td>
             </tr>
             {% else %}
             <tr>
-              <td class="align-middle"><a href="{% url 'organizers:event_change' event.pk %}">{{ event.name }}</a></td>
+              <td style="display:none">{{ event.id }}</td>
+              <td class="align-middle">{{ event.name }}</td>
               <td class="align-middle">{{ event.date }}</td>
               <td class="align-middle">{{ event.location }}</td>
-              <td class="align-middle">{{ event.tag.get_html_badge }}</td>
               <td class="text-right">
-                <a href="{% url 'organizers:event_change' event.pk %}" class="btn btn-primary">Edit</a>
+                {% for tag in event.tag.all %}
+                  {{ tag.get_html_badge }}
+                {% endfor %}
+              </td>
+              <td class="text-right">
+                <a href="{% url 'organizers:event_change' event.pk %}" class="btn btn-outline-primary"><i class="fa fa-edit"></i></a>
               </td>
             </tr>
             {% endif %}
