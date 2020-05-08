@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_student', 'is_organizer','is_superuser')
     search_fields = ('first_name', 'last_name',)
     list_per_page = 25
-    exclude = ('password')
+    exclude = ('password',)
 
 admin.site.register(User, UserAdmin)
 
