@@ -41,14 +41,9 @@ class StudentSignUpForm(forms.ModelForm):
 
     def send_initSMS(self, request, queryset):
         #SECURE
-        #account_sid = os.environ['TWILIO_ACCOUNT_SID']
-        #auth_token = os.environ['TWILIO_AUTH_TOKEN']
-        #TEST
-        #account_sid = 'AC65adbf73953668e75fc8dea6e776a18a'
-        #auth_token = '3890a907679e2a2402c5595bfa576f14'
-        #REAL BELOW
-        account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
-        auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+        account_sid = os.environ['TWILIO_ACCOUNT_SID']
+        auth_token = os.environ['TWILIO_AUTH_TOKEN']
+
         client = Client(account_sid, auth_token)
         def getStudentNumber(id):
             conn = psycopg2.connect("dbname='pardpush' user='pardpushs'")
@@ -188,14 +183,9 @@ class TagSelectForm(forms.ModelForm):
             return lst
         def sendLoop(lst, msg):
             #SECURE
-            #account_sid = os.environ['TWILIO_ACCOUNT_SID']
-            #auth_token = os.environ['TWILIO_AUTH_TOKEN']
-            #TEST
-            #account_sid = 'AC65adbf73953668e75fc8dea6e776a18a'
-            #auth_token = '3890a907679e2a2402c5595bfa576f14'
-            #REAL BELOW
-            account_sid = 'AC2deef53dadb3d1035219e6f346544e98'
-            auth_token = 'd437bf9f8e7dc2602dd5632d62062810'
+            account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            auth_token = os.environ['TWILIO_AUTH_TOKEN']
+
             client = Client(account_sid, auth_token)
             for i in lst:
                 try:
